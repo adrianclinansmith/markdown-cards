@@ -5,6 +5,8 @@ import remarkMath from 'remark-math'
 import rehypeKatex from 'rehype-katex'
 // import "./App.css";
 
+import 'katex/dist/katex.min.css'
+
 const mdString = `A paragraph with *emphasis* and **strong importance**.
 
 > A block quote with ~strikethrough~ and a URL: https://reactjs.org.
