@@ -3,13 +3,10 @@
 	https://github.com/react-syntax-highlighter/react-syntax-highlighter/issues/479
 */
 
-import React from "react";
 import ReactMarkdown from "react-markdown";
 import remarkGfm from 'remark-gfm';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
-import {Prism as SyntaxHighlighter} from "react-syntax-highlighter";
-import {vscDarkPlus} from 'react-syntax-highlighter/dist/esm/styles/prism';
 import MdCodeBlock from "./MdCodeBlock";
 
 import 'katex/dist/katex.min.css'
@@ -28,42 +25,36 @@ A table:
 | - | - |
 
 math: $a^2 = \\sqrt{b^2 + c^2}$
+$$
+a^2 = \\sqrt{b^2 + c^2}
+$$  
+
+$$
+\\sqrt{\\frac{a}{b}}
+$$
 
 C code:  
 \`\`\`c
 int myInt = 12;
 \`\`\`
+Java code:  
+\`\`\`java
+String s = new String();
+\`\`\`
 `;
 
 function App() {
 	return (
-	<div className="App">
-		<header className="App-header">
-			<ReactMarkdown 
-				children={mdString}
-				remarkPlugins={[remarkGfm, remarkMath]}
-				rehypePlugins={[rehypeKatex]}
-				components={{
-					code({inline, className, children, style, ...props}) {
-					  const match = /language-(\w+)/.exec(className || '')
-					  return !inline && match ? (
-						<SyntaxHighlighter
-						  children={String(children).replace(/\n$/, '')}
-						  style={vscDarkPlus}
-						  language={match[1]}
-						  PreTag="div"
-						  {...props}
-						/>
-					  ) : (
-						<code className={className} {...props}>
-						  {children}
-						</code>
-					  )
-					}
-				  }}
-			/>
-		</header>
-	</div>
+		<div className="App">
+			<header className="App-header">
+				<ReactMarkdown 
+					children={mdString}
+					components={{code: MdCodeBlock}}
+					rehypePlugins={[rehypeKatex]}
+					remarkPlugins={[remarkGfm, remarkMath]}
+				/>
+			</header>
+		</div>
 	);
 }
 
