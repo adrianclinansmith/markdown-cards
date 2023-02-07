@@ -23,6 +23,7 @@ A table:
 
 | a | b |
 | - | - |
+| c | d |
 
 math: $a^2 = \\sqrt{b^2 + c^2}$
 $$
