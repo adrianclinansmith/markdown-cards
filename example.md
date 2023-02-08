@@ -29,3 +29,4 @@ Java code:
 ```java
 String s = new String();
 ```
+Normal: int x = 12; vs inline: `int x = 12;`

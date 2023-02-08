@@ -11,7 +11,7 @@ import 'katex/dist/katex.min.css'
 import Button from "@mui/material/Button";
 import { ChangeEvent, Dispatch, useState } from "react";
 
-import MdCodeBlock from "./MdCodeBlock";
+import MdCodeBlock from "./components/MdCodeBlock";
 
 function readFile(e: ChangeEvent<HTMLInputElement>, setString: Dispatch<React.SetStateAction<string>>) {
 	if (e.target.files == null) {
