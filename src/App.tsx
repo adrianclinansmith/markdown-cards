@@ -7,45 +7,11 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from 'remark-gfm';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
-import Input from '@mui/material/Input';
-import MdCodeBlock from "./MdCodeBlock";
-
 import 'katex/dist/katex.min.css'
 import Button from "@mui/material/Button";
 import { ChangeEvent, Dispatch, useState } from "react";
 
-const mdString = `A paragraph with *emphasis* and **strong importance**.
-
-> A block quote with ~strikethrough~ and a URL: https://reactjs.org.
-
-* Lists
-* [ ] todo
-* [x] done
-
-A table:
-
-| a | b |
-| - | - |
-| c | d |
-
-math: $a^2 = \\sqrt{b^2 + c^2}$
-$$
-a^2 = \\sqrt{b^2 + c^2}
-$$  
-
-$$
-\\sqrt{\\frac{a}{b}}
-$$
-
-C code:  
-\`\`\`c
-int myInt = 12;
-\`\`\`
-Java code:  
-\`\`\`java
-String s = new String();
-\`\`\`
-`;
+import MdCodeBlock from "./MdCodeBlock";
 
 function readFile(e: ChangeEvent<HTMLInputElement>, setString: Dispatch<React.SetStateAction<string>>) {
 	if (e.target.files == null) {
