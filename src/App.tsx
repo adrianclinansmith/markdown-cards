@@ -7,9 +7,12 @@ import ReactMarkdown from "react-markdown";
 import remarkGfm from 'remark-gfm';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
+import Input from '@mui/material/Input';
 import MdCodeBlock from "./MdCodeBlock";
 
 import 'katex/dist/katex.min.css'
+import Button from "@mui/material/Button";
+import { ChangeEvent, Dispatch, useState } from "react";
 
 const mdString = `A paragraph with *emphasis* and **strong importance**.
 
@@ -44,17 +47,32 @@ String s = new String();
 \`\`\`
 `;
 
+function readFile(e: ChangeEvent<HTMLInputElement>, setString: Dispatch<React.SetStateAction<string>>) {
+	if (e.target.files == null) {
+		setString("");
+		return;
+	}
+	const reader = new FileReader();
+	reader.onload = () => {
+		setString(typeof reader.result === "string" ? reader.result : "");
+	};
+	reader.readAsText(e.target.files[0]);
+}
+
 function App() {
+	const [markdown, setMarkdown] = useState("");
 	return (
 		<div className="App">
-			<header className="App-header">
-				<ReactMarkdown 
-					children={mdString}
-					components={{code: MdCodeBlock}}
-					rehypePlugins={[rehypeKatex]}
-					remarkPlugins={[remarkGfm, remarkMath]}
-				/>
-			</header>
+			<Button variant="contained" component="label">
+				Upload
+				<input hidden type="file" onChange={e => readFile(e, setMarkdown)} />
+			</Button>
+			<ReactMarkdown 
+				children={markdown}
+				components={{code: MdCodeBlock}}
+				rehypePlugins={[rehypeKatex]}
+				remarkPlugins={[remarkGfm, remarkMath]}
+			/>
 		</div>
 	);
 }

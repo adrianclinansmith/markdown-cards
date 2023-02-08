@@ -8,6 +8,7 @@ $ npm install remark-math
 $ npm install rehype-katex
 $ npm install react-syntax-highlighter
 $ npm install @types/react-syntax-highlighter
+$ npm install @mui/material @emotion/react @emotion/styled
 ```
 
 # Package Sources: 
