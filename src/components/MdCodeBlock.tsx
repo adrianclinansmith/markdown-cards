@@ -8,7 +8,7 @@ import { CodeProps } from "react-markdown/lib/ast-to-react";
 import { Prism as SyntaxHighlighter } from "react-syntax-highlighter"
 import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism"
 
-function MdCodeBlock({node, inline, className, children, style, ...props}: CodeProps){
+function MdCodeBlock({node, inline, className, children, style, ...props}: CodeProps) {
     const match = /language-(\w+)/.exec(className || "");
 	if (inline || !match) {
 		return <code children={children} className={className} {...props}/>

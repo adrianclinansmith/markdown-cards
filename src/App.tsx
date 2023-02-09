@@ -25,6 +25,15 @@ function readFile(e: ChangeEvent<HTMLInputElement>, setString: Dispatch<React.Se
 	reader.readAsText(e.target.files[0]);
 }
 
+document.onkeydown = (e: KeyboardEvent) => {
+	console.log("pressed key: " + e.key);
+	if (e.key === "ArrowLeft") {
+		console.log("\tpressed arrow left");
+	} else if (e.key === "ArrowRight") {
+		console.log("\tpressed arrow right");
+	}
+}
+
 function App() {
 	const [markdown, setMarkdown] = useState("");
 	return (
