@@ -27,7 +27,8 @@ function readFile(e: ChangeEvent<HTMLInputElement>, setString: Dispatch<React.Se
 }
 
 function splitIntoCards(markdown: string) {
-	/* cards.length >= 2 and cards.length % 2 == 0 */
+	/* cards[2n] == <front of card> and cards[2n+1] == <back of card>
+	cards.length >= 2 && cards.length % 2 == 0 */
 	const cards: string[] = [];
 	let inCodeblock = false;
 	for (const line of markdown.split("\n")) {
@@ -45,7 +46,7 @@ function splitIntoCards(markdown: string) {
 	return cards;
 }
 
-function App() {
+export default function App() {
 	console.log("CALLED APP");
 	const [markdown, setMarkdown] = useState("");
 	const [index, setIndex] = useState(0);
@@ -59,7 +60,7 @@ function App() {
 		} else if (e.key === "ArrowRight") {
 			setIndex((index + 1) % cards.length);
 		}
-	}
+	};
 	return (
 		<div className="App">
 			<Button variant="contained" component="label">
@@ -79,5 +80,3 @@ function App() {
 		</div>
 	);
 }
-
-export default App;
