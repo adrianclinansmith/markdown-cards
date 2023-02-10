@@ -1,11 +1,18 @@
 # One
 
-one
+one ## not a header
 
 ## two
 
-two
+```python
+# not a header
+x = 12
+```
 
 ### three
 
+\## not a header
 three
+$$
+x^2
+$$
