@@ -14,5 +14,5 @@ x = 12
 \## not a header
 three
 $$
-x^2
+a^2 = \sqrt{b^2 + c^2}
 $$

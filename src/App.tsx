@@ -8,26 +8,49 @@ import remarkGfm from 'remark-gfm';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 import 'katex/dist/katex.min.css'
-import Button from "@mui/material/Button";
-import { ChangeEvent, Dispatch, useState } from "react";
+import { useState } from "react";
 
 import MdCodeBlock from "./components/MdCodeBlock";
+import UploadButton from "./components/UploadButton";
+import Card from "@mui/material/Card";
+import CardContent from "@mui/material/CardContent";
 
-function readFile(e: ChangeEvent<HTMLInputElement>, setString: Dispatch<React.SetStateAction<string>>, setNumber: Dispatch<React.SetStateAction<number>>) {
-	setNumber(0);
-	if (e.target.files == null) {
-		setString("");
-		return;
-	}
-	const reader = new FileReader();
-	reader.onload = () => {
-		setString(typeof reader.result === "string" ? reader.result : "");
+export default function App() {
+	const [markdown, setMarkdown] = useState("");
+	const [index, setIndex] = useState(0);
+	const cardContent = splitIntoCards(markdown);
+	document.onkeydown = (e: KeyboardEvent) => {
+		const evenIndex = index % 2 === 0;
+		if (e.key === "ArrowLeft") {
+			setIndex((index > 0 ? index : cardContent.length) - (evenIndex ? 2 : 1));
+		} else if (e.key === "ArrowRight") {
+			setIndex((index + (evenIndex ? 2 : 1)) % cardContent.length);
+		} else if (e.key === "ArrowUp" || e.key === "ArrowDown") {
+			setIndex(index + (evenIndex ? 1 : -1));
+		}
 	};
-	reader.readAsText(e.target.files[0]);
+	return (
+		<div className="App">
+			<UploadButton setMarkdown={setMarkdown} setIndex={setIndex} />
+			<Card>
+				<CardContent>
+					<ReactMarkdown 
+						children={cardContent[index]}
+						components={{code: MdCodeBlock}}
+						rehypePlugins={[rehypeKatex]}
+						remarkPlugins={[remarkGfm, remarkMath]}
+					/>
+				</CardContent>
+			</Card>
+		</div>
+	);
 }
 
+// Helper Functions
+// *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*
+
 function splitIntoCards(markdown: string) {
-	/* cards[2n] == <front of card> and cards[2n+1] == <back of card>
+	/* cards[2n] is <front of card> and cards[2n+1] is <back of card>
 	cards.length >= 2 && cards.length % 2 == 0 */
 	const cards: string[] = [];
 	let inCodeblock = false;
@@ -44,39 +67,4 @@ function splitIntoCards(markdown: string) {
 	}
 	console.log(cards);
 	return cards;
-}
-
-export default function App() {
-	console.log("CALLED APP");
-	const [markdown, setMarkdown] = useState("");
-	const [index, setIndex] = useState(0);
-	// const cards = markdown.match(/#{1,4}[^#]+/g) || [markdown];
-	const cards = splitIntoCards(markdown);
-	console.log(cards);
-	document.onkeydown = (e: KeyboardEvent) => {
-		console.log("pressed key: " + e.key);
-		if (e.key === "ArrowLeft") {
-			setIndex(index > 0 ? index - 1 : cards.length - 1);
-		} else if (e.key === "ArrowRight") {
-			setIndex((index + 1) % cards.length);
-		}
-	};
-	return (
-		<div className="App">
-			<Button variant="contained" component="label">
-				Upload
-				<input 
-					hidden 
-					type="file" 
-					onChange={e => readFile(e, setMarkdown, setIndex)} 
-				/>
-			</Button>
-			<ReactMarkdown 
-				children={cards[index]}
-				components={{code: MdCodeBlock}}
-				rehypePlugins={[rehypeKatex]}
-				remarkPlugins={[remarkGfm, remarkMath]}
-			/>
-		</div>
-	);
 }
