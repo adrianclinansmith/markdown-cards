@@ -15,9 +15,13 @@ import UploadButton from "./components/UploadButton";
 import Card from "@mui/material/Card";
 import CardContent from "@mui/material/CardContent";
 
+let pointerStart = 0;
+let pointerIsDown = false;
+
 export default function App() {
 	const [markdown, setMarkdown] = useState("");
 	const [index, setIndex] = useState(0);
+	const [leftPosition, setLeftPosition] = useState(0);
 	const cardContent = splitIntoCards(markdown);
 	document.onkeydown = (e: KeyboardEvent) => {
 		const evenIndex = index % 2 === 0;
@@ -32,7 +36,12 @@ export default function App() {
 	return (
 		<div className="App">
 			<UploadButton setMarkdown={setMarkdown} setIndex={setIndex} />
-			<Card>
+			<Card 
+				onPointerDown={e => pointerDown(e, index, setIndex)}
+				onPointerMove={e => pointerMove(e, index, setIndex, setLeftPosition)}
+				onPointerUp={e => pointerUp(e, index, setIndex)}
+				sx={{position: "relative", left: `${leftPosition}px`}}
+			>
 				<CardContent>
 					<ReactMarkdown 
 						children={cardContent[index]}
@@ -67,4 +76,24 @@ function splitIntoCards(markdown: string) {
 	}
 	console.log(cards);
 	return cards;
+}
+
+function pointerDown(e: React.PointerEvent<HTMLDivElement>, index: number, setIndex: React.Dispatch<React.SetStateAction<number>>) {
+	pointerIsDown = true;
+	pointerStart = e.clientX;
+	console.log(`pointerDown (${e.clientX}, ${e.clientY})`);
+}
+
+function pointerMove(e: React.PointerEvent<HTMLDivElement>, index: number, setIndex: React.Dispatch<React.SetStateAction<number>>, setHorizontalPos: React.Dispatch<React.SetStateAction<number>>) {
+	if (!pointerIsDown) {
+		return;
+	}
+	setHorizontalPos(e.clientX - pointerStart);
+	console.log(`pointerMove (${e.clientX}, ${e.clientY})`);
+}
+
+function pointerUp(e: React.PointerEvent<HTMLDivElement>, index: number, setIndex: React.Dispatch<React.SetStateAction<number>>) {
+	pointerIsDown = false;
+	setIndex(index + (index % 2 === 0 ? 1 : -1));
+	console.log(`pointerUp (${e.clientX}, ${e.clientY})`);
 }
