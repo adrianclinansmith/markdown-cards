@@ -1,7 +1,7 @@
 import Button from "@mui/material/Button";
 import { ChangeEvent, Dispatch, SetStateAction } from "react";
 
-interface UploadButtonProps {
+type UploadButtonProps = {
     setMarkdown: Dispatch<SetStateAction<string>>,
     setIndex: Dispatch<SetStateAction<number>>
 }
