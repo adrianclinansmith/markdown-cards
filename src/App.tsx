@@ -13,6 +13,7 @@ import { useState } from "react";
 import MdCodeBlock from "./components/MdCodeBlock";
 import UploadButton from "./components/UploadButton";
 import DisplayCard from "./components/DisplayCard";
+import Typography from "@mui/material/Typography";
 
 export default function App() {
 	const [markdown, setMarkdown] = useState("");
@@ -31,6 +32,8 @@ export default function App() {
 	return (
 		<div className="App">
 			<UploadButton setMarkdown={setMarkdown} setIndex={setIndex} />
+			<Typography>{`${index+1}/${cardContent.length}`}</Typography>
+			{/* swipe: https://dominicarrojado.com/posts/how-to-create-your-own-swiper-in-react-and-typescript-with-tests-part-1/  */}
 			<DisplayCard index={index} setIndex={setIndex}>
 				<ReactMarkdown 
 					children={cardContent[index]}
