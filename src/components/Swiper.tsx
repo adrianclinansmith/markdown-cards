@@ -11,76 +11,70 @@ import rehypeKatex from "rehype-katex";
 import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
 import MdCodeBlock from "./MdCodeBlock";
+import { maxHeight } from "@mui/system";
 
 type SwiperProps = {
     items: string[];
+	itemIndexRef: React.MutableRefObject<number>;
 }
 
 const MIN_SWIPE_REQUIRED = 40;
 
-function Swiper({ items }: SwiperProps) {
+function Swiper({ items, itemIndexRef }: SwiperProps) {
     // hooks
-    const containerRef = useRef<HTMLUListElement>(null);
-    const mouseDownOffsetXRef = useRef(0);
+    const ulRef = useRef<HTMLUListElement>(null);
+    const pointerDownOffsetXRef = useRef(0);
 	const currentOffsetXRef = useRef(0);
     const minOffsetXRef = useRef(0);
-    const mouseDownXRef = useRef(0);
+    const pointerDownXRef = useRef(0);
 	const [offsetX, setOffsetX] = useState(0);
     const [isSwiping, setIsSwiping] = useState(false);
     // mouse events
-    const onMouseMove = (e: PointerEvent) => {
-        const mouseDiff = mouseDownXRef.current - e.clientX;
-        let newOffsetX = mouseDownOffsetXRef.current - mouseDiff;
-        const maxOffsetX = 0;
-        const minOffsetX = minOffsetXRef.current;
-        if (newOffsetX > maxOffsetX) {
-            newOffsetX = maxOffsetX;
-        }
-        if (newOffsetX < minOffsetX) {
-            newOffsetX = minOffsetX;
-        }
+    const onPointerMove = (e: PointerEvent) => {
+        let mouseDiff = e.clientX - pointerDownXRef.current;
+		const containerWidth = ulRef.current!.offsetWidth;
+		const newOffsetX = -itemIndexRef.current * containerWidth + mouseDiff;
         setOffsetX(newOffsetX);
 		currentOffsetXRef.current = newOffsetX;
     };
-    const onMouseUp = () => {
+    const onPointerUp = () => {
         setIsSwiping(false);
-        const currentOffsetX = mouseDownOffsetXRef.current;
-		let newOffsetX = currentOffsetXRef.current;
-        const containerEl = containerRef.current;
+        const mouseDownOffsetX = pointerDownOffsetXRef.current;
+		const currentOffsetX = currentOffsetXRef.current;
+        const containerEl = ulRef.current;
         const containerWidth = containerEl!.offsetWidth;
-        const diff = currentOffsetX - newOffsetX;
-		console.log(`diff: ${diff}`);
+        const diff = mouseDownOffsetX - currentOffsetX;
         if (diff > MIN_SWIPE_REQUIRED) {
-            newOffsetX = Math.floor(newOffsetX / containerWidth) * containerWidth;
+			itemIndexRef.current = Math.min(itemIndexRef.current + 1, items.length - 1);
         } else if (diff < -MIN_SWIPE_REQUIRED) {
-            newOffsetX = Math.ceil(newOffsetX / containerWidth) * containerWidth;
-        } else {
-            newOffsetX = Math.round(newOffsetX / containerWidth) * containerWidth;
+			itemIndexRef.current = Math.max(itemIndexRef.current - 1, 0);
         }
-        setOffsetX(newOffsetX);
+		const newOffsetX = -itemIndexRef.current * containerWidth;
+		setOffsetX(newOffsetX);
 		currentOffsetXRef.current = newOffsetX;
-        window.removeEventListener('pointerup', onMouseUp);
-        window.removeEventListener('pointermove', onMouseMove);
+        window.removeEventListener('pointermove', onPointerMove);
+		window.removeEventListener('pointerup', onPointerUp);
     };
-    const onMouseDown = (e: React.PointerEvent<HTMLDivElement>) => {
+    const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
+		e.preventDefault();
         setIsSwiping(true);
-		mouseDownOffsetXRef.current = offsetX;
-        mouseDownXRef.current = e.clientX;
-        const containerEl = containerRef.current;
+		pointerDownOffsetXRef.current = offsetX;
+        pointerDownXRef.current = e.clientX;
+        const containerEl = ulRef.current;
         minOffsetXRef.current = containerEl!.offsetWidth - containerEl!.scrollWidth;
-        window.addEventListener('pointermove', onMouseMove);
-        window.addEventListener('pointerup', onMouseUp);
+        window.addEventListener('pointermove', onPointerMove);
+        window.addEventListener('pointerup', onPointerUp);
     };
     return (
-    <div className="swiper-container" onPointerDown={onMouseDown}>
+    <div className="swiper-container" onPointerDown={onPointerDown}>
         <ul 
-            ref={containerRef}
+            ref={ulRef}
             className={`swiper-list ${isSwiping ? 'is-swiping' : ''}`}
             style={{transform: `translate3d(${offsetX}px, 0, 0)`}}
         >
             {items.map((item, index) => 
 				<li className="swiper-item" key={index}>
-					<Card>
+					<Card style={{height: "100vh", maxHeight:"1000px"}}>
 						<CardContent>
 							<ReactMarkdown 
 								children={item}
@@ -96,5 +90,7 @@ function Swiper({ items }: SwiperProps) {
     </div>
     )
 }
+
+// Event Handlers
 
 export default Swiper

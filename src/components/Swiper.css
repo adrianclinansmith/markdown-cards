@@ -1,8 +1,13 @@
 .swiper-container {
-    width: 100%;
-    max-width: 100%;
-    overflow: hidden;
+    width: 100vw;
+    max-width: 1000px;
+	height: 100vh;
+	max-height: 1000px;
+	overflow-x: hidden;
+	overflow-y: auto;
     touch-action: pan-y;
+	background-color: red;
+	display: inline-block;
 }
   
 .swiper-list {

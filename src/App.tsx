@@ -8,7 +8,7 @@ import remarkGfm from 'remark-gfm';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 import 'katex/dist/katex.min.css'
-import { useState } from "react";
+import { useRef, useState } from "react";
 
 import MdCodeBlock from "./components/MdCodeBlock";
 import UploadButton from "./components/UploadButton";
@@ -20,24 +20,26 @@ import Swiper from "./components/Swiper";
 
 export default function App() {
 	const [markdown, setMarkdown] = useState("");
-	const [index, setIndex] = useState(0);
+	// const [index, setIndex] = useState(0);
 	const cardContent = splitIntoCards(markdown);
+	const cardIndexRef = useRef(0);
 	// const cardContent = content;
-	document.onkeydown = (e: KeyboardEvent) => {
-		const evenIndex = index % 2 === 0;
-		if (e.key === "ArrowLeft") {
-			setIndex((index > 0 ? index : cardContent.length) - (evenIndex ? 2 : 1));
-		} else if (e.key === "ArrowRight") {
-			setIndex((index + (evenIndex ? 2 : 1)) % cardContent.length);
-		} else if (e.key === "ArrowUp" || e.key === "ArrowDown") {
-			setIndex(index + (evenIndex ? 1 : -1));
-		}
-	}; 
+	// document.onkeydown = (e: KeyboardEvent) => {
+	// 	const evenIndex = index % 2 === 0;
+	// 	if (e.key === "ArrowLeft") {
+	// 		setIndex((index > 0 ? index : cardContent.length) - (evenIndex ? 2 : 1));
+	// 	} else if (e.key === "ArrowRight") {
+	// 		setIndex((index + (evenIndex ? 2 : 1)) % cardContent.length);
+	// 	} else if (e.key === "ArrowUp" || e.key === "ArrowDown") {
+	// 		setIndex(index + (evenIndex ? 1 : -1));
+	// 	}
+	// }; 
 	return (
 		<div className="App">
-			<UploadButton setMarkdown={setMarkdown} setIndex={setIndex} />
-			<Typography>{`${index+1}/${cardContent.length}`}</Typography>
-			<Swiper items={cardContent}/>
+			<UploadButton setMarkdown={setMarkdown} 
+			indexRef={cardIndexRef} />
+			<Typography>{`${cardIndexRef.current}/${cardContent.length}`}</Typography>
+			<Swiper items={cardContent} itemIndexRef={cardIndexRef}/>
 		</div>
 	);
 }
