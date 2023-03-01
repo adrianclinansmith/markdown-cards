@@ -14,11 +14,15 @@ import MdCodeBlock from "./components/MdCodeBlock";
 import UploadButton from "./components/UploadButton";
 import DisplayCard from "./components/DisplayCard";
 import Typography from "@mui/material/Typography";
+import Swiper from "./components/Swiper";
+
+// const defaultContent = ["# one", "one", "## two", "two"];
 
 export default function App() {
 	const [markdown, setMarkdown] = useState("");
 	const [index, setIndex] = useState(0);
 	const cardContent = splitIntoCards(markdown);
+	// const cardContent = content;
 	document.onkeydown = (e: KeyboardEvent) => {
 		const evenIndex = index % 2 === 0;
 		if (e.key === "ArrowLeft") {
@@ -28,20 +32,12 @@ export default function App() {
 		} else if (e.key === "ArrowUp" || e.key === "ArrowDown") {
 			setIndex(index + (evenIndex ? 1 : -1));
 		}
-	};
+	}; 
 	return (
 		<div className="App">
 			<UploadButton setMarkdown={setMarkdown} setIndex={setIndex} />
 			<Typography>{`${index+1}/${cardContent.length}`}</Typography>
-			{/* swipe: https://dominicarrojado.com/posts/how-to-create-your-own-swiper-in-react-and-typescript-with-tests-part-1/  */}
-			<DisplayCard index={index} setIndex={setIndex}>
-				<ReactMarkdown 
-					children={cardContent[index]}
-					components={{code: MdCodeBlock}}
-					rehypePlugins={[rehypeKatex]}
-					remarkPlugins={[remarkGfm, remarkMath]}
-				/>
-			</DisplayCard>
+			<Swiper items={cardContent}/>
 		</div>
 	);
 }

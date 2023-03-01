@@ -14,5 +14,5 @@ x = 12
 \## not a header
 three
 $$
-a^2 = \sqrt{b^2 + c^2}
+a^2 = { 51 \over \sqrt{b^2 + c^2} }
 $$
