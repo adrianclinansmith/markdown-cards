@@ -21,10 +21,14 @@ type SwiperProps = {
 const MIN_SWIPE_REQUIRED = 40;
 
 function Swiper({ items, itemIndexRef }: SwiperProps) {
+	console.log("render swiper");
     // hooks
     const ulRef = useRef<HTMLUListElement>(null);
-    const pointerDownOffsetXRef = useRef(0);
-	const currentOffsetXRef = useRef(0);
+	const liDisplayRefs = useRef<boolean[]>([]);
+	while (liDisplayRefs.current.length < items.length) {
+		const len = liDisplayRefs.current.length
+		liDisplayRefs.current.push(len % 2 === 0);
+	}
     const minOffsetXRef = useRef(0);
     const pointerDownXRef = useRef(0);
 	const [offsetX, setOffsetX] = useState(0);
@@ -35,30 +39,32 @@ function Swiper({ items, itemIndexRef }: SwiperProps) {
 		const containerWidth = ulRef.current!.offsetWidth;
 		const newOffsetX = -itemIndexRef.current * containerWidth + mouseDiff;
         setOffsetX(newOffsetX);
-		currentOffsetXRef.current = newOffsetX;
     };
-    const onPointerUp = () => {
+    const onPointerUp = (e: PointerEvent) => {
         setIsSwiping(false);
-        const mouseDownOffsetX = pointerDownOffsetXRef.current;
-		const currentOffsetX = currentOffsetXRef.current;
-        const containerEl = ulRef.current;
-        const containerWidth = containerEl!.offsetWidth;
-        const diff = mouseDownOffsetX - currentOffsetX;
-        if (diff > MIN_SWIPE_REQUIRED) {
-			itemIndexRef.current = Math.min(itemIndexRef.current + 1, items.length - 1);
-        } else if (diff < -MIN_SWIPE_REQUIRED) {
+        const ulWidth = ulRef.current!.offsetWidth;
+        const mouseDiff = e.clientX - pointerDownXRef.current;
+		// swipe right
+        if (mouseDiff < -MIN_SWIPE_REQUIRED) {
+			itemIndexRef.current = Math.min(itemIndexRef.current + 1, Math.round(items.length / 2) - 1);
+        } // swipe left
+		else if (mouseDiff > MIN_SWIPE_REQUIRED) {
 			itemIndexRef.current = Math.max(itemIndexRef.current - 1, 0);
-        }
-		const newOffsetX = -itemIndexRef.current * containerWidth;
+        } // flip current card 
+		else {
+			let i = 2 * itemIndexRef.current;
+			liDisplayRefs.current[i] = !liDisplayRefs.current[i];
+			liDisplayRefs.current[i+1] = !liDisplayRefs.current[i+1];
+		}
+		console.log(liDisplayRefs.current);
+		const newOffsetX = -itemIndexRef.current * ulWidth;
 		setOffsetX(newOffsetX);
-		currentOffsetXRef.current = newOffsetX;
         window.removeEventListener('pointermove', onPointerMove);
 		window.removeEventListener('pointerup', onPointerUp);
     };
     const onPointerDown = (e: React.PointerEvent<HTMLDivElement>) => {
 		e.preventDefault();
         setIsSwiping(true);
-		pointerDownOffsetXRef.current = offsetX;
         pointerDownXRef.current = e.clientX;
         const containerEl = ulRef.current;
         minOffsetXRef.current = containerEl!.offsetWidth - containerEl!.scrollWidth;
@@ -73,7 +79,11 @@ function Swiper({ items, itemIndexRef }: SwiperProps) {
             style={{transform: `translate3d(${offsetX}px, 0, 0)`}}
         >
             {items.map((item, index) => 
-				<li className="swiper-item" key={index}>
+				<li 
+					className="swiper-item" 
+					key={index}
+					style={{display: liDisplayRefs.current[index] ? "block" : "none"}}
+				>
 					<Card style={{height: "100vh", maxHeight:"1000px"}}>
 						<CardContent>
 							<ReactMarkdown 
