@@ -6,7 +6,6 @@
 	overflow-x: hidden;
 	overflow-y: auto;
     touch-action: pan-y;
-	background-color: red;
 	display: inline-block;
 }
   
