@@ -63,7 +63,6 @@ function Swiper({ items, fronts, backs, itemIndexRef }: SwiperProps) {
         pointerDownXRef.current = e.clientX;
         const containerEl = ulRef.current;
         minOffsetXRef.current = containerEl!.offsetWidth - containerEl!.scrollWidth;
-		// setAllowFlip(true);
 		allowFlip.current = true;
         window.addEventListener('pointermove', onPointerMove);
         window.addEventListener('pointerup', onPointerUp);

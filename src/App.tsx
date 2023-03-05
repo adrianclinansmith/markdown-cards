@@ -16,8 +16,11 @@ import DisplayCard from "./components/DisplayCard";
 import Typography from "@mui/material/Typography";
 import Swiper from "./components/Swiper";
 
-const defaultContent = ["# one", "one", 
-"## two", "$$\nx^2\n$$", "## three", "three"];
+const defaultContent = [
+	"# one", "one", 
+	"## two", "$$\nx^2\n$$", 
+	"## three", "three"
+];
 const fronts = ["# one", "## two", "### three"];
 const backs = ["one", "$$\nx^2\n$$", "three"];
 
