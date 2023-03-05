@@ -12,13 +12,14 @@ function FlipItem({active, children, index}: FlipItemProps) {
 	const onPointerUp = () => {
 		console.log(`flip active: ${active}`);
 		if (active) {
-			document.querySelector(`#myCard-${index}`)?.classList.toggle("flip");
+			const element = document.querySelector(`#flip-card-${index}`);
+			element?.classList.toggle("flip");
 		}
 		
 	}
 	return (
 	<div className="flip-card" 
-		id={`myCard-${index}`} 
+		id={`flip-card-${index}`} 
 		onPointerUp={onPointerUp}
 	>
 		<div className="flip-card-inner">

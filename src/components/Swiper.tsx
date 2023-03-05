@@ -27,7 +27,6 @@ function Swiper({ items, fronts, backs, itemIndexRef }: SwiperProps) {
 	// console.log("render swiper");
     // hooks
     const ulRef = useRef<HTMLUListElement>(null);
-	// const [allowFlip, setAllowFlip] = useState(true);
 	const allowFlip = useRef(true);
     const minOffsetXRef = useRef(0);
     const pointerDownXRef = useRef(0);
