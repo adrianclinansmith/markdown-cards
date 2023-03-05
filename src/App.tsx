@@ -16,19 +16,13 @@ import DisplayCard from "./components/DisplayCard";
 import Typography from "@mui/material/Typography";
 import Swiper from "./components/Swiper";
 
-const defaultContent = [
-	"# one", "one", 
-	"## two", "$$\nx^2\n$$", 
-	"## three", "three"
-];
 const fronts = ["# one", "## two", "### three"];
-const backs = ["one", "$$\nx^2\n$$", "three"];
+const backs = ["one", "$$\n{\\sqrt{a^2 + b^2} = c \\over 2}\n$$", "three"];
 
 export default function App() {
 	const [markdown, setMarkdown] = useState("");
 	// const [index, setIndex] = useState(0);
 	// const cardContent = splitIntoCards(markdown);
-	const cardContent = defaultContent
 	const cardIndexRef = useRef(0);
 	// const cardContent = content;
 	// document.onkeydown = (e: KeyboardEvent) => {
@@ -43,10 +37,9 @@ export default function App() {
 	// }; 
 	return (
 		<div className="App">
-			<UploadButton setMarkdown={setMarkdown} 
-			indexRef={cardIndexRef} />
-			<Typography>{`${cardIndexRef.current}/${cardContent.length}`}</Typography>
-			<Swiper items={cardContent} fronts={fronts} backs={backs} itemIndexRef={cardIndexRef}/>
+			<UploadButton setMarkdown={setMarkdown} indexRef={cardIndexRef} />
+			<Typography>{`${cardIndexRef.current}/${fronts.length}`}</Typography>
+			<Swiper fronts={fronts} backs={backs} itemIndexRef={cardIndexRef}/>
 		</div>
 	);
 }

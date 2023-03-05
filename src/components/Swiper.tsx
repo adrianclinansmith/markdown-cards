@@ -15,7 +15,6 @@ import { maxHeight } from "@mui/system";
 import FlipItem from "./FlipItem";
 
 type SwiperProps = {
-    items: string[];
 	fronts: string[];
 	backs: string[];
 	itemIndexRef: React.MutableRefObject<number>;
@@ -23,7 +22,7 @@ type SwiperProps = {
 
 const MIN_SWIPE_REQUIRED = 40;
 
-function Swiper({ items, fronts, backs, itemIndexRef }: SwiperProps) {
+function Swiper({ fronts, backs, itemIndexRef }: SwiperProps) {
 	// console.log("render swiper");
     // hooks
     const ulRef = useRef<HTMLUListElement>(null);
