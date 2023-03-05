@@ -12,20 +12,24 @@ import remarkGfm from "remark-gfm";
 import remarkMath from "remark-math";
 import MdCodeBlock from "./MdCodeBlock";
 import { maxHeight } from "@mui/system";
+import FlipItem from "./FlipItem";
 
 type SwiperProps = {
     items: string[];
+	fronts: string[];
+	backs: string[];
 	itemIndexRef: React.MutableRefObject<number>;
 }
 
 const MIN_SWIPE_REQUIRED = 40;
 
-function Swiper({ items, itemIndexRef }: SwiperProps) {
+function Swiper({ items, fronts, backs, itemIndexRef }: SwiperProps) {
 	console.log("render swiper");
     // hooks
     const ulRef = useRef<HTMLUListElement>(null);
 	const liDisplayRefs = useRef<boolean[]>([]);
-	while (liDisplayRefs.current.length < items.length) {
+	// const [flip, setFlip] = useState(-1);
+	while (liDisplayRefs.current.length < fronts.length) {
 		const len = liDisplayRefs.current.length
 		liDisplayRefs.current.push(len % 2 === 0);
 	}
@@ -46,15 +50,17 @@ function Swiper({ items, itemIndexRef }: SwiperProps) {
         const mouseDiff = e.clientX - pointerDownXRef.current;
 		// swipe right
         if (mouseDiff < -MIN_SWIPE_REQUIRED) {
-			itemIndexRef.current = Math.min(itemIndexRef.current + 1, Math.round(items.length / 2) - 1);
+			// itemIndexRef.current = Math.min(itemIndexRef.current + 1, Math.round(fronts.length / 2) - 1);
+			itemIndexRef.current = Math.min(itemIndexRef.current + 1, fronts.length - 1);
         } // swipe left
 		else if (mouseDiff > MIN_SWIPE_REQUIRED) {
 			itemIndexRef.current = Math.max(itemIndexRef.current - 1, 0);
         } // flip current card 
 		else {
-			let i = 2 * itemIndexRef.current;
-			liDisplayRefs.current[i] = !liDisplayRefs.current[i];
-			liDisplayRefs.current[i+1] = !liDisplayRefs.current[i+1];
+			// let i = 2 * itemIndexRef.current;
+			// liDisplayRefs.current[i] = !liDisplayRefs.current[i];
+			// liDisplayRefs.current[i+1] = !liDisplayRefs.current[i+1];
+			// setFlip(itemIndexRef.current);
 		}
 		console.log(liDisplayRefs.current);
 		const newOffsetX = -itemIndexRef.current * ulWidth;
@@ -78,23 +84,73 @@ function Swiper({ items, itemIndexRef }: SwiperProps) {
             className={`swiper-list ${isSwiping ? 'is-swiping' : ''}`}
             style={{transform: `translate3d(${offsetX}px, 0, 0)`}}
         >
-            {items.map((item, index) => 
-				<li 
-					className="swiper-item" 
-					key={index}
-					style={{display: liDisplayRefs.current[index] ? "block" : "none"}}
-				>
-					<Card style={{height: "100vh", maxHeight:"1000px"}}>
-						<CardContent>
-							<ReactMarkdown 
-								children={item}
-								components={{code: MdCodeBlock}}
-								rehypePlugins={[rehypeKatex]}
-								remarkPlugins={[remarkGfm, remarkMath]}
-							/>
-						</CardContent>
-					</Card>
-			  </li>
+            {fronts.map((front, index) => 
+			// 	<li 
+			// 		className="swiper-item" 
+			// 		key={index}
+			// 		style={{
+			// 			display: liDisplayRefs.current[index] ? "block" : "none"
+			// 		}}
+			// 	>
+			// 		<Card style={{
+			// 				height: "100vh", 
+			// 				maxHeight:"1000px",
+			// 				perspective: "1000px",
+			// 				transform: index === flip ? "rotateY(180deg)" : "none"
+			// 			}}
+			// 		>
+			// 			<CardContent style={{
+			// 				transition: "transform 0.8s",
+			// 				transformStyle: "preserve-3d",
+			// 				transform: "rotateY(180deg)"
+			// 			}}
+			// 			>
+			// 				<div className="card-front" style={{
+			// 					position: "absolute",
+			// 					width: "100%",
+			// 					height: "100%",
+			// 					backfaceVisibility: "hidden"
+			// 				}}>
+			// 					<ReactMarkdown 
+			// 						children={front}
+			// 						components={{code: MdCodeBlock}}
+			// 						rehypePlugins={[rehypeKatex]}
+			// 						remarkPlugins={[remarkGfm, remarkMath]}
+			// 					/>
+			// 				</div>
+			// 				<div className="card-back" style={{
+			// 					position: "absolute",
+			// 					width: "100%",
+			// 					height: "100%",
+			// 					backfaceVisibility: "hidden",
+			// 					transform: "rotateY(180deg)"
+			// 				}}>
+			// 					<ReactMarkdown 
+			// 						children={backs[index]}
+			// 						components={{code: MdCodeBlock}}
+			// 						rehypePlugins={[rehypeKatex]}
+			// 						remarkPlugins={[remarkGfm, remarkMath]}
+			// 					/>
+			// 				</div>
+			// 			</CardContent>
+			// 		</Card>
+			//   </li>
+			<li className="swiper-item" key={index}>
+				<FlipItem index={index}>
+					<ReactMarkdown 
+						children={front}
+						components={{code: MdCodeBlock}}
+						rehypePlugins={[rehypeKatex]}
+						remarkPlugins={[remarkGfm, remarkMath]}
+					/>
+					<ReactMarkdown 
+						children={backs[index]}
+						components={{code: MdCodeBlock}}
+						rehypePlugins={[rehypeKatex]}
+						remarkPlugins={[remarkGfm, remarkMath]}
+					/>
+				</FlipItem>
+			</li>
 			)}
         </ul>
     </div>
