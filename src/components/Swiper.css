@@ -11,16 +11,16 @@
 }
   
 .swiper-list {
-	width: 100%;
 	height: 100%;
-    /* min-width: 100%; */
-    display: flex;
+	display: flex;
     flex-direction: row;
+	/* column-gap: 50px; */
     list-style: none;
     padding: 0;
     margin: 0;
     transition: transform 0.3s ease-out;
-	text-align: center;
+	/* align-items: center; */
+	/* justify-content: space-around; */
 }
 
 .swiper-list.is-swiping {
