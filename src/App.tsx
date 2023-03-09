@@ -15,6 +15,7 @@ import UploadButton from "./components/UploadButton";
 import DisplayCard from "./components/DisplayCard";
 import Typography from "@mui/material/Typography";
 import Swiper from "./components/Swiper";
+import FlipItem from "./components/FlipItem";
 
 const fronts = ["# one", "## two", "### three"];
 const backs = ["one", "$$\n{\\sqrt{a^2 + b^2} = c \\over 2}\n$$", "three"];
@@ -24,6 +25,7 @@ export default function App() {
 	// const [index, setIndex] = useState(0);
 	// const cardContent = splitIntoCards(markdown);
 	const cardIndexRef = useRef(0);
+	const cardDidMoveRef = useRef(false);
 	// const cardContent = content;
 	// document.onkeydown = (e: KeyboardEvent) => {
 	// 	const evenIndex = index % 2 === 0;
@@ -39,7 +41,24 @@ export default function App() {
 		<div className="App">
 			<UploadButton setMarkdown={setMarkdown} indexRef={cardIndexRef} />
 			<Typography>{`${cardIndexRef.current}/${fronts.length}`}</Typography>
-			<Swiper fronts={fronts} backs={backs} itemIndexRef={cardIndexRef}/>
+			<Swiper didMoveRef={cardDidMoveRef} indexRef={cardIndexRef}>
+				{fronts.map((front, index) => 
+					<FlipItem disabled={cardDidMoveRef} index={index} key={index}>
+						<ReactMarkdown 
+							children={front}
+							components={{code: MdCodeBlock}}
+							rehypePlugins={[rehypeKatex]}
+							remarkPlugins={[remarkGfm, remarkMath]}
+						/>
+						<ReactMarkdown 
+							children={backs[index]}
+							components={{code: MdCodeBlock}}
+							rehypePlugins={[rehypeKatex]}
+							remarkPlugins={[remarkGfm, remarkMath]}
+						/>
+					</FlipItem>
+				)}
+			</Swiper>
 		</div>
 	);
 }

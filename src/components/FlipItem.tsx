@@ -2,16 +2,16 @@ import React from 'react'
 import "./FlipItem.css"
 
 type FlipItemProps = {
-	active: boolean;
 	children: React.ReactElement[];
+	disabled: React.MutableRefObject<boolean>;
 	index: number;
 };
 
-function FlipItem({active, children, index}: FlipItemProps) {
+function FlipItem({children, disabled, index}: FlipItemProps) {
 	// console.log("flip item render");
 	const onPointerUp = () => {
-		console.log(`flip active: ${active}`);
-		if (active) {
+		console.log(`flip disabled: ${disabled.current}`);
+		if (!disabled.current) {
 			const element = document.querySelector(`#flip-card-${index}`);
 			element?.classList.toggle("flip");
 		}

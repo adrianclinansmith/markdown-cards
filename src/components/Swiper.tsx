@@ -1,32 +1,18 @@
-import { CardContent } from "@mui/material";
-import Card from "@mui/material/Card";
-import React, { useRef, useState } from 'react'
-import { SwiperItemType } from "../types";
 
+import React, { useRef, useState } from 'react'
 import "./Swiper.css"
-import './SwiperItem.css';
-import SwiperItem from "./SwiperItem";
-import ReactMarkdown from "react-markdown";
-import rehypeKatex from "rehype-katex";
-import remarkGfm from "remark-gfm";
-import remarkMath from "remark-math";
-import MdCodeBlock from "./MdCodeBlock";
-import { maxHeight } from "@mui/system";
-import FlipItem from "./FlipItem";
 
 type SwiperProps = {
-	fronts: string[];
-	backs: string[];
-	itemIndexRef: React.MutableRefObject<number>;
+	children: React.ReactElement[];
+	didMoveRef: React.MutableRefObject<boolean>;
+	indexRef: React.MutableRefObject<number>;
 }
 
 const MIN_SWIPE_REQUIRED = 40;
 
-function Swiper({ fronts, backs, itemIndexRef }: SwiperProps) {
-	// console.log("render swiper");
+function Swiper({ children, didMoveRef, indexRef }: SwiperProps) {
     // hooks
     const ulRef = useRef<HTMLUListElement>(null);
-	const allowFlip = useRef(true);
     const minOffsetXRef = useRef(0);
     const pointerDownXRef = useRef(0);
 	const [offsetX, setOffsetX] = useState(0);
@@ -36,8 +22,8 @@ function Swiper({ fronts, backs, itemIndexRef }: SwiperProps) {
 		console.log("on pointer move");
         let mouseDiff = e.clientX - pointerDownXRef.current;
 		const containerWidth = ulRef.current!.offsetWidth;
-		const newOffsetX = -itemIndexRef.current * containerWidth + mouseDiff;
-        allowFlip.current = allowFlip.current && Math.abs(mouseDiff) < 5;
+		const newOffsetX = -indexRef.current * containerWidth + mouseDiff;
+        didMoveRef.current = didMoveRef.current || Math.abs(mouseDiff) > 5;
 		setOffsetX(newOffsetX);
     };
     const onPointerUp = (e: PointerEvent) => {
@@ -46,12 +32,12 @@ function Swiper({ fronts, backs, itemIndexRef }: SwiperProps) {
         const mouseDiff = e.clientX - pointerDownXRef.current;
 		// swipe right
         if (mouseDiff < -MIN_SWIPE_REQUIRED) {
-			itemIndexRef.current = Math.min(itemIndexRef.current + 1, fronts.length - 1);
+			indexRef.current = Math.min(indexRef.current + 1, children.length - 1);
         } // swipe left
 		else if (mouseDiff > MIN_SWIPE_REQUIRED) {
-			itemIndexRef.current = Math.max(itemIndexRef.current - 1, 0);
+			indexRef.current = Math.max(indexRef.current - 1, 0);
         } 
-		const newOffsetX = -itemIndexRef.current * ulWidth;
+		const newOffsetX = -indexRef.current * ulWidth;
 		setOffsetX(newOffsetX);
         window.removeEventListener('pointermove', onPointerMove);
 		window.removeEventListener('pointerup', onPointerUp);
@@ -62,7 +48,7 @@ function Swiper({ fronts, backs, itemIndexRef }: SwiperProps) {
         pointerDownXRef.current = e.clientX;
         const containerEl = ulRef.current;
         minOffsetXRef.current = containerEl!.offsetWidth - containerEl!.scrollWidth;
-		allowFlip.current = true;
+		didMoveRef.current = false;
         window.addEventListener('pointermove', onPointerMove);
         window.addEventListener('pointerup', onPointerUp);
     };
@@ -73,7 +59,12 @@ function Swiper({ fronts, backs, itemIndexRef }: SwiperProps) {
             className={`swiper-list ${isSwiping ? 'is-swiping' : ''}`}
             style={{transform: `translate3d(${offsetX}px, 0, 0)`}}
         >
-            {fronts.map((front, index) => 
+			{children.map((child, index) => 
+				<li className="swiper-item" key={index}>
+					{child}
+				</li>
+			)}
+            {/* {fronts.map((front, index) => 
 				<li className="swiper-item" key={index}>
 					<FlipItem active={allowFlip.current} index={index}>
 						<ReactMarkdown 
@@ -90,7 +81,7 @@ function Swiper({ fronts, backs, itemIndexRef }: SwiperProps) {
 						/>
 					</FlipItem>
 				</li>
-			)}
+			)} */}
         </ul>
     </div>
     )
