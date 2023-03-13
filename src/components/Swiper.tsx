@@ -1,6 +1,6 @@
 
 import React, { useRef, useState } from 'react'
-import "./Swiper.css"
+import "./styles/Swiper.css"
 
 type SwiperProps = {
 	children: React.ReactElement[];
@@ -8,7 +8,7 @@ type SwiperProps = {
 	indexRef: React.MutableRefObject<number>;
 }
 
-const MIN_SWIPE_REQUIRED = 40;
+const MIN_SWIPE_REQUIRED = 10;
 
 function Swiper({ children, didMoveRef, indexRef }: SwiperProps) {
     // hooks
@@ -19,7 +19,6 @@ function Swiper({ children, didMoveRef, indexRef }: SwiperProps) {
     const [isSwiping, setIsSwiping] = useState(false);
     // mouse events
     const onPointerMove = (e: PointerEvent) => {
-		console.log("on pointer move");
         let mouseDiff = e.clientX - pointerDownXRef.current;
 		const containerWidth = ulRef.current!.offsetWidth;
 		const newOffsetX = -indexRef.current * containerWidth + mouseDiff;
@@ -30,6 +29,7 @@ function Swiper({ children, didMoveRef, indexRef }: SwiperProps) {
         setIsSwiping(false);
         const ulWidth = ulRef.current!.offsetWidth;
         const mouseDiff = e.clientX - pointerDownXRef.current;
+		console.log(`pointer up: ${mouseDiff}`);
 		// swipe right
         if (mouseDiff < -MIN_SWIPE_REQUIRED) {
 			indexRef.current = Math.min(indexRef.current + 1, children.length - 1);
@@ -64,24 +64,6 @@ function Swiper({ children, didMoveRef, indexRef }: SwiperProps) {
 					{child}
 				</li>
 			)}
-            {/* {fronts.map((front, index) => 
-				<li className="swiper-item" key={index}>
-					<FlipItem active={allowFlip.current} index={index}>
-						<ReactMarkdown 
-							children={front}
-							components={{code: MdCodeBlock}}
-							rehypePlugins={[rehypeKatex]}
-							remarkPlugins={[remarkGfm, remarkMath]}
-						/>
-						<ReactMarkdown 
-							children={backs[index]}
-							components={{code: MdCodeBlock}}
-							rehypePlugins={[rehypeKatex]}
-							remarkPlugins={[remarkGfm, remarkMath]}
-						/>
-					</FlipItem>
-				</li>
-			)} */}
         </ul>
     </div>
     )

@@ -1,8 +1,10 @@
 .swiper-container {
-    width: 80vw;
-    max-width: 1000px;
-	height: 90vh;
-	max-height: 1000px;
+    width: 100%;
+    /* max-width: 1000px; */
+	/* height: inherit; */
+	/* max-height: 1000px; */
+	/* height: 400px; */
+	height: 100%;
 	overflow-x: hidden;
 	overflow-y: auto;
     touch-action: pan-y;

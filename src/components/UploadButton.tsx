@@ -8,7 +8,12 @@ type UploadButtonProps = {
 
 export default function UploadButton({setMarkdown, indexRef}: UploadButtonProps) {
     return (
-        <Button variant="contained" component="label">
+        <Button variant="contained" component="label"
+		onClick={() => {
+			const sc = document.body.getElementsByClassName("swiper-container")[0] as HTMLElement;
+			console.log(`sc height: ${sc.scrollHeight}`);
+		  }}
+		>
             Upload
             <input 
                 hidden 

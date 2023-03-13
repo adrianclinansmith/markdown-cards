@@ -1,5 +1,5 @@
 import React from 'react'
-import "./FlipItem.css"
+import "./styles/FlipItem.css"
 
 type FlipItemProps = {
 	children: React.ReactElement[];

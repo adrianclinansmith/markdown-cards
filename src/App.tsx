@@ -8,12 +8,12 @@ import remarkGfm from 'remark-gfm';
 import remarkMath from 'remark-math';
 import rehypeKatex from 'rehype-katex';
 import 'katex/dist/katex.min.css'
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import MdCodeBlock from "./components/MdCodeBlock";
 import UploadButton from "./components/UploadButton";
-import DisplayCard from "./components/DisplayCard";
 import Typography from "@mui/material/Typography";
+import Toolbar from "@mui/material/Toolbar";
 import Swiper from "./components/Swiper";
 import FlipItem from "./components/FlipItem";
 
@@ -21,26 +21,16 @@ const fronts = ["# one", "## two", "### three"];
 const backs = ["one", "$$\n{\\sqrt{a^2 + b^2} = c \\over 2}\n$$", "three"];
 
 export default function App() {
+	useEffect(disableTouchMoveOnBody, []); // Called on mount (once only)
 	const [markdown, setMarkdown] = useState("");
-	// const [index, setIndex] = useState(0);
-	// const cardContent = splitIntoCards(markdown);
 	const cardIndexRef = useRef(0);
 	const cardDidMoveRef = useRef(false);
-	// const cardContent = content;
-	// document.onkeydown = (e: KeyboardEvent) => {
-	// 	const evenIndex = index % 2 === 0;
-	// 	if (e.key === "ArrowLeft") {
-	// 		setIndex((index > 0 ? index : cardContent.length) - (evenIndex ? 2 : 1));
-	// 	} else if (e.key === "ArrowRight") {
-	// 		setIndex((index + (evenIndex ? 2 : 1)) % cardContent.length);
-	// 	} else if (e.key === "ArrowUp" || e.key === "ArrowDown") {
-	// 		setIndex(index + (evenIndex ? 1 : -1));
-	// 	}
-	// }; 
 	return (
-		<div className="App">
-			<UploadButton setMarkdown={setMarkdown} indexRef={cardIndexRef} />
-			<Typography>{`${cardIndexRef.current}/${fronts.length}`}</Typography>
+		<div className="App" style={{height: `${window.screen.availHeight}px`}}>
+			<Toolbar>
+				<UploadButton setMarkdown={setMarkdown} indexRef={cardIndexRef} />
+				<Typography>{`${cardIndexRef.current}/${fronts.length}`}</Typography>
+			</Toolbar>
 			<Swiper didMoveRef={cardDidMoveRef} indexRef={cardIndexRef}>
 				{fronts.map((front, index) => 
 					<FlipItem disabled={cardDidMoveRef} index={index} key={index}>
@@ -66,6 +56,16 @@ export default function App() {
 // *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*
 // Helper Functions
 // *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*
+
+function disableTouchMoveOnBody() {
+	/* On mobile this prevents the screen from moving around when the user
+	tries to swipe the cards.  
+	src: https://stackoverflow.com/questions/7768269/ipad-safari-disable-scrolling-and-bounce-effect*/
+	document.body.addEventListener("touchmove",
+		(e) => { e.preventDefault(); console.log("Called touchmove");}, 
+		{ passive: false }
+	);
+}
 
 function splitIntoCards(markdown: string) {
 	/* cards[2n] is <front of card> and cards[2n+1] is <back of card>
