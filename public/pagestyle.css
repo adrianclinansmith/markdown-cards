@@ -1,15 +1,8 @@
 body {
 	background-color:#1c87c9; 
-	/* overflow-y: hidden; 
-	min-height: 100%;
- 	min-height: -webkit-fill-available; */
 }
 
-html {
-	/* height: -webkit-fill-available; */
-}
-
-.root {
-	text-align: center;
-	/* height: inherit; */
-}
+/* .root {
+	text-align: center; 
+	height: inherit;
+} */
