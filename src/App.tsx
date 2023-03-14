@@ -47,17 +47,6 @@ export default function App() {
 					transform: `rotate(${showToolbar ? 0 : 180}deg)`,
 					transition: "transform 0.6s"
 				}}
-				// sx={{
-				// 	animation: "spin 2s linear infinite",
-				// 	"@keyframes spin": {
-				// 	  "0%": {
-				// 		transform: "rotate(360deg)",
-				// 	  },
-				// 	  "100%": {
-				// 		transform: "rotate(0deg)",
-				// 	  },
-				// 	},
-				//   }}
 			>show</Button>
 			<Slide in={showToolbar} mountOnEnter={true} timeout={500}>
 				<Toolbar className="tb" style={{
