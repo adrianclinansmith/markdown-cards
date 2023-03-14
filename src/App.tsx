@@ -49,10 +49,10 @@ export default function App() {
 				}}
 			>show</Button>
 			<Slide in={showToolbar} mountOnEnter={true} timeout={500}>
-				<Toolbar className="tb" style={{
+				<Toolbar className="tb" disableGutters={true} style={{
 					position: "absolute", 
-					width: "96%",
 					background: "green",
+					width: "100%",
 					zIndex: 1}}>
 					<UploadButton setMarkdown={setMarkdown} indexRef={cardIndexRef} />
 					<Typography>{`${cardIndexRef.current}/${fronts.length}`}</Typography>
