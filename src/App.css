@@ -1,38 +1,141 @@
 .App {
-  text-align: center;
+	height: 100%;
+	padding-left: 2%; /* Center card horizontally with scroll-snap */
 }
 
-.App-logo {
-  height: 40vmin;
-  pointer-events: none;
+/* *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~ */
+/* Toolbar */
+/* *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~ */
+
+.toolbar {
+	--toolbar-height: 70px;
+	--toolbar-hide-duration: 1s;
+	display: flex;
+	/* padding-left: 2%; */
+	gap: 2%;
+	position: absolute;
+	z-index: 5;
+	background-color: aliceblue;
+	width: 100%;
+	height: var(--toolbar-height);
+	left: 0; /* Ignore parent's left padding */
+	border-bottom: 2px solid black;
+	transition-duration: var(--toolbar-hide-duration);
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  .App-logo {
-    animation: App-logo-spin infinite 20s linear;
-  }
+.toolbar.hide {
+	transform: translateY(calc(var(--toolbar-height) * -1));
 }
 
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: calc(10px + 2vmin);
-  color: white;
+.toolbar-item {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-grow: 1;
+	max-width: var(--toolbar-height);
+	background-color: transparent;
+	border: none;
+	opacity: 0.3;
+	/* background-color: red; */
 }
 
-.App-link {
-  color: #61dafb;
+#toolbar-toggler {
+	margin-left: auto; /* Put on the right side of the toolbar */
+	transition-duration: var(--toolbar-hide-duration);
 }
 
-@keyframes App-logo-spin {
-  from {
-    transform: rotate(0deg);
-  }
-  to {
-    transform: rotate(360deg);
-  }
+#toolbar-toggler.prevent-hide {
+	transform: translateY(calc(var(--toolbar-height))) rotate(180deg);
 }
+
+#font-size-picker {
+	display: flex;
+	flex-direction: column;
+	justify-content: flex-start;
+	overflow-y: scroll;
+	scroll-snap-type: y mandatory;
+	line-height: var(--toolbar-height); /* Vertically align text */
+}
+
+#font-size-picker > span {
+	flex: none;
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	text-align: center;
+	scroll-snap-align: start;
+}
+
+/* *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~ */
+/* Deck & Cards */
+/* *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~ */
+
+.deck {
+	height: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+	gap: 5%;
+	overflow: scroll;
+	scroll-snap-type: x mandatory;
+	perspective: 1000px;
+}
+
+.card {
+	position: relative;
+	background-color: white;
+	box-sizing: border-box; /* width & height include padding & border */
+	flex: none; /* fully inflexible: it's sized by width & height only */
+	width: 98%;
+	height: 98%;
+	border: 1px solid black;
+	scroll-snap-align: start; /* scroll snaps to start of this element */
+	box-shadow: 2px 2px 5px black;
+	overflow-wrap: break-word; /* break overflow words if needed */
+	font-size: larger;
+	/* padding: 10%; */
+
+	/* center inner content */
+	/* display: flex;  */
+
+	transition: transform 0.6s;
+	transform-style: preserve-3d;
+	z-index: 2;
+}
+
+.card.flipped {
+	transform: rotateY(180deg); 
+}
+
+.card-front, .card-back {
+	backface-visibility: hidden;
+	transform: rotateX(0deg); /* Needed to hide backface in Firefox */
+	position: absolute;
+	inset: 0;     /* Center vertically & horizontally */
+  	margin: auto; /* Center vertically & horizontally */
+	width: fit-content;
+	max-width: 80%;
+	height: fit-content;
+	max-height: 80%;
+	overflow-y: scroll; /* Breaks backface-visibility if defined on parent */ 
+}
+
+.card-front {
+	/* background-color: red; */
+	z-index: 3;
+}
+
+.card-back {
+	/* background-color: blue; */
+	transform: rotateY(-180deg);
+	z-index: 1;
+}
+
+/* *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~ */
+/* Markdown */
+/* *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~ */
+
+/* Prevent side-scroll on KaTex (not ideal) */
+/* p {
+	overflow-x: hidden;
+} */
