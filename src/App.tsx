@@ -4,9 +4,10 @@ import "katex/dist/katex.min.css";
 import ToolbarItem from "./ToolbarItem";
 import Card from "./Card";
 import Md from "./Md";
+import { defaultMarkdown } from "./DefaultMarkdown";
 
 export default function App() {
-	const [md, setMd] = useState("# one\none\n## two\ntwo");
+	const [md, setMd] = useState(defaultMarkdown);
 	const [fronts, backs] = splitMarkdown(md);
 	return (
 		<div className="App">
