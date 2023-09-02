@@ -5,10 +5,11 @@ import { ChangeEvent, Dispatch, SetStateAction, useEffect, useRef } from "react"
 
 interface Props {
 	id: "uploader" | "refresher" | "toolbar-toggler" | "font-size-picker";
-	setMd?: React.Dispatch<React.SetStateAction<string>>;
+	setMd?: Dispatch<SetStateAction<string>>;
+	setFontSize?: Dispatch<SetStateAction<string>>;
 }
 
-export default function ToolbarItem({ id, setMd }: Props) {
+export default function ToolbarItem({ id, setMd, setFontSize }: Props) {
 	const options = {
 		root: document.getElementById("font-size-picker"),
 		rootMargin: "0px",
@@ -16,10 +17,14 @@ export default function ToolbarItem({ id, setMd }: Props) {
 	};
 	const callback: IntersectionObserverCallback = (entries) => {
 		if (entries[0].isIntersecting) {
-			console.log(`${entries[0].target.innerHTML} entered threshold`);
-		}
-		
-	}
+			const pickedFont = entries[0].target.innerHTML;
+			console.log(`${pickedFont} entered threshold`);
+			const fonts: {[key: string]: string} = {
+				M: "medium", L: "large", XL: "x-large"
+			};
+			setFontSize!(fonts[pickedFont]);
+		}	
+	};
 	const observerRef = useRef(new IntersectionObserver(callback, options));
 	const mediumFontRef = useRef(null);
 	const largeFontRef = useRef(null);

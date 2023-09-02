@@ -13,6 +13,7 @@ interface Props {
 export default function Md({ children }: Props) {
 	return (
 		<ReactMarkdown
+			className="react-markdown"
 			components={{ code: MdCodeBlock }}
 			remarkPlugins={[remarkGfm, remarkMath]}
 			rehypePlugins={[rehypeKatex]}

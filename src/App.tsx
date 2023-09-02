@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import './App.css';
 import "katex/dist/katex.min.css";
 import ToolbarItem from "./ToolbarItem";
@@ -7,14 +7,24 @@ import Md from "./Md";
 import { defaultMarkdown } from "./DefaultMarkdown";
 
 export default function App() {
+	// States
 	const [md, setMd] = useState(defaultMarkdown);
 	const [fronts, backs] = splitMarkdown(md);
+	const [fontSize, setFontSize] = useState("medium");
+	// Effects
+	useEffect(() => {
+		const mdElements = document.getElementsByClassName("react-markdown");
+		for (const md of mdElements) {
+			(md as HTMLElement).style.fontSize = fontSize;
+		}
+	}, [fontSize]);
+	// JSX
 	return (
 		<div className="App">
 			<header className="toolbar">
 				<ToolbarItem id="uploader" setMd={setMd} />
 				<ToolbarItem id="refresher" />
-				<ToolbarItem id="font-size-picker" />
+				<ToolbarItem id="font-size-picker" setFontSize={setFontSize} />
 				<ToolbarItem id="toolbar-toggler" />
 			</header>
 			<div className="deck">
