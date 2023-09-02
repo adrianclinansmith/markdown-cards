@@ -1,7 +1,7 @@
 import FileUploadIcon from '@mui/icons-material/FileUpload';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import { ChangeEvent, Dispatch, SetStateAction } from "react";
+import { ChangeEvent, Dispatch, PointerEventHandler, SetStateAction, useEffect, useRef, useState } from "react";
 
 interface Props {
 	id: "uploader" | "refresher" | "toolbar-toggler" | "font-size-picker";
@@ -9,6 +9,29 @@ interface Props {
 }
 
 export default function ToolbarItem({ id, setMd }: Props) {
+	const options = {
+		root: document.getElementById("font-size-picker"),
+		rootMargin: "0px",
+		threshold: 0.9,
+	};
+	const callback: IntersectionObserverCallback = (entries) => {
+		if (entries[0].isIntersecting) {
+			console.log(`${entries[0].target.innerHTML} entered threshold`);
+		}
+		
+	}
+	const observerRef = useRef(new IntersectionObserver(callback, options));
+	const mediumFontRef = useRef(null);
+	const largeFontRef = useRef(null);
+	const xLargeFontRef = useRef(null);
+	useEffect(() => {
+		if (id === "font-size-picker") {
+			observerRef.current.unobserve(mediumFontRef.current!);
+			observerRef.current.observe(mediumFontRef.current!);
+		}
+	}, [id]);
+	
+	// JSX
 	const className = "toolbar-item"
 	if (id === "uploader") {
 		return (
@@ -33,10 +56,14 @@ export default function ToolbarItem({ id, setMd }: Props) {
 	}
 	else if (id === "font-size-picker") {
 		return (
-			<div className={className} id={id}>
-				<span>one</span>
-				<span>two</span>
-				<span>three</span>
+			<div 
+				className={className} 
+				id={id} 
+				// onScroll={fontSizePickerScroll} 
+			>
+				<span ref={mediumFontRef}>M</span>
+				<span>L</span>
+				<span>XL</span>
 			</div>
 		)
 	}
@@ -52,6 +79,18 @@ export default function ToolbarItem({ id, setMd }: Props) {
 // *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*
 // Event Handlers
 // *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*
+
+// function fontSizePickerScroll(e: React.UIEvent<HTMLDivElement>) {
+// 	const fontSizePicker = e.currentTarget;
+// 	let isScrolling = fontSizePicker.classList.contains("is-scrolling");
+// 	if (!isScrolling) {
+// 		fontSizePicker.classList.add("is-scrolling");
+// 		setTimeout(() => {
+// 			fontSizePicker.classList.remove("is-scrolling");
+// 			console.log("is scrolling");
+// 		}, 1000);
+// 	}
+// }
 
 function readFile(e: ChangeEvent<HTMLInputElement>, 
 setMd: Dispatch<SetStateAction<string>>) {
@@ -78,8 +117,9 @@ function refreshCards(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
 }
 
 function showToolbar(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
-	console.log(`showToolbar: ${e.currentTarget}`);
 	e.currentTarget.parentElement?.classList.toggle("hide");
 	e.currentTarget.classList.toggle("prevent-hide");
 }
+
+
 

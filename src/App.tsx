@@ -18,14 +18,14 @@ export default function App() {
 				<ToolbarItem id="toolbar-toggler" />
 			</header>
 			<div className="deck">
-			{
-				fronts.map((front, i) => 
-					<Card position={1} key={i}>
-						<Md>{front}</Md>
-						<Md>{backs[i]}</Md>
-					</Card>
-				)
-			}
+				{
+					fronts.map((front, i) => 
+						<Card position={1} key={i}>
+							<Md>{front}</Md>
+							<Md>{backs[i]}</Md>
+						</Card>
+					)
+				}
 			</div>
 		</div>
 	);
