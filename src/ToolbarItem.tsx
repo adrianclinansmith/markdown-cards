@@ -1,7 +1,7 @@
 import FileUploadIcon from '@mui/icons-material/FileUpload';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import { ChangeEvent, Dispatch, PointerEventHandler, SetStateAction, useEffect, useRef, useState } from "react";
+import { ChangeEvent, Dispatch, SetStateAction, useEffect, useRef } from "react";
 
 interface Props {
 	id: "uploader" | "refresher" | "toolbar-toggler" | "font-size-picker";
