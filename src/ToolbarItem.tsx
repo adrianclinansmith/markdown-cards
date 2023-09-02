@@ -30,6 +30,7 @@ export default function ToolbarItem({ id, setMd, setFontSize }: Props) {
 	const largeFontRef = useRef(null);
 	const xLargeFontRef = useRef(null);
 	useEffect(() => {
+		console.log(`useEffect for ${id}`);
 		if (id === "font-size-picker") {
 			reobserve(observerRef.current, mediumFontRef.current!);
 			reobserve(observerRef.current, largeFontRef.current!);
@@ -47,7 +48,7 @@ export default function ToolbarItem({ id, setMd, setFontSize }: Props) {
 					accept=".md,.txt"
 					hidden
 					id="file-input"
-					onChange={(e) => readFile(e, setMd!)}
+					onChange={(e) => uploaderOnChange(e, setMd!)}
 					type="file"
 				/>
 			</label>
@@ -55,18 +56,14 @@ export default function ToolbarItem({ id, setMd, setFontSize }: Props) {
 	}
 	else if (id === "refresher") {
 		return (
-			<button className={className} id={id} onClick={refreshCards}>
+			<button className={className} id={id} onClick={refresherOnClick}>
 				<RefreshIcon fontSize="large"/>
 			</button>
 		)
 	}
 	else if (id === "font-size-picker") {
 		return (
-			<div 
-				className={className} 
-				id={id} 
-				// onScroll={fontSizePickerScroll} 
-			>
+			<div className={className} id={id}>
 				<span ref={mediumFontRef}>M</span>
 				<span ref={largeFontRef}>L</span>
 				<span ref={xLargeFontRef}>XL</span>
@@ -75,7 +72,11 @@ export default function ToolbarItem({ id, setMd, setFontSize }: Props) {
 	}
 	else /* className === toolbar-toggler */ {
 		return (
-			<button className={className} id={id} onClick={showToolbar}>
+			<button
+				className={className}
+				id={id}
+				onClick={toolbarTogglerOnClick}
+			>
 				<KeyboardArrowUpIcon fontSize="large"/>
 			</button>
 		)
@@ -86,19 +87,7 @@ export default function ToolbarItem({ id, setMd, setFontSize }: Props) {
 // Event Handlers
 // *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*
 
-// function fontSizePickerScroll(e: React.UIEvent<HTMLDivElement>) {
-// 	const fontSizePicker = e.currentTarget;
-// 	let isScrolling = fontSizePicker.classList.contains("is-scrolling");
-// 	if (!isScrolling) {
-// 		fontSizePicker.classList.add("is-scrolling");
-// 		setTimeout(() => {
-// 			fontSizePicker.classList.remove("is-scrolling");
-// 			console.log("is scrolling");
-// 		}, 1000);
-// 	}
-// }
-
-function readFile(e: ChangeEvent<HTMLInputElement>, 
+function uploaderOnChange(e: ChangeEvent<HTMLInputElement>, 
 setMd: Dispatch<SetStateAction<string>>) {
 	const reader = new FileReader();
 	reader.onload = () => {
@@ -110,7 +99,7 @@ setMd: Dispatch<SetStateAction<string>>) {
 	}
 }
 
-function refreshCards(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+function refresherOnClick(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
 	const toolbar = e.currentTarget.parentElement!;
 	const deck = toolbar.nextElementSibling!; 
 	toolbar.classList.add("hide");
@@ -122,7 +111,8 @@ function refreshCards(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
 	deck.scrollTo({left: 0, behavior: "smooth"});
 }
 
-function showToolbar(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
+function toolbarTogglerOnClick(e: React.MouseEvent<HTMLButtonElement,
+MouseEvent>) {
 	e.currentTarget.parentElement?.classList.toggle("hide");
 	e.currentTarget.classList.toggle("prevent-hide");
 }
