@@ -26,8 +26,9 @@ export default function ToolbarItem({ id, setMd }: Props) {
 	const xLargeFontRef = useRef(null);
 	useEffect(() => {
 		if (id === "font-size-picker") {
-			observerRef.current.unobserve(mediumFontRef.current!);
-			observerRef.current.observe(mediumFontRef.current!);
+			reobserve(observerRef.current, mediumFontRef.current!);
+			reobserve(observerRef.current, largeFontRef.current!);
+			reobserve(observerRef.current, xLargeFontRef.current!);
 		}
 	}, [id]);
 	
@@ -62,8 +63,8 @@ export default function ToolbarItem({ id, setMd }: Props) {
 				// onScroll={fontSizePickerScroll} 
 			>
 				<span ref={mediumFontRef}>M</span>
-				<span>L</span>
-				<span>XL</span>
+				<span ref={largeFontRef}>L</span>
+				<span ref={xLargeFontRef}>XL</span>
 			</div>
 		)
 	}
@@ -121,5 +122,11 @@ function showToolbar(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
 	e.currentTarget.classList.toggle("prevent-hide");
 }
 
+// *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*
+// Helper Functions
+// *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*
 
-
+function reobserve(observer: IntersectionObserver, element: HTMLElement) {
+	observer.unobserve(element);
+	observer.observe(element);
+}
