@@ -25,7 +25,7 @@ export default function App() {
 		for (const mdContent of mdElements) {
 			(mdContent as HTMLElement).style.fontSize = fontSize;
 		}
-	}, [fontSize]);
+	}, [fontSize, md]);
 	useEffect(() => {
 		for (const card of document.getElementsByClassName("card")) {	
 			reobserve(observerRef.current, card);
