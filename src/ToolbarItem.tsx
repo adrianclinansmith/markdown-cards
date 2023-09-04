@@ -18,7 +18,6 @@ export default function ToolbarItem({ id, setMd, setFontSize }: Props) {
 	const callback: IntersectionObserverCallback = (entries) => {
 		if (entries[0].isIntersecting) {
 			const pickedFont = entries[0].target.innerHTML;
-			console.log(`${pickedFont} entered threshold`);
 			const fonts: {[key: string]: string} = {
 				M: "medium", L: "large", XL: "x-large"
 			};
@@ -30,7 +29,6 @@ export default function ToolbarItem({ id, setMd, setFontSize }: Props) {
 	const largeFontRef = useRef(null);
 	const xLargeFontRef = useRef(null);
 	useEffect(() => {
-		console.log(`useEffect for ${id}`);
 		if (id === "font-size-picker") {
 			reobserve(observerRef.current, mediumFontRef.current!);
 			reobserve(observerRef.current, largeFontRef.current!);

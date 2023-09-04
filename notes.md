@@ -22,3 +22,7 @@ import "katex/dist/katex.min.css";
 Here's a link for settings and troubleshooting:
 
 https://katex.org/docs/issues.html 
+
+# Issues
+
+- Should bookmark the last opened file in the upload button

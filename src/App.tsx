@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import './App.css';
 import "katex/dist/katex.min.css";
 import ToolbarItem from "./ToolbarItem";
@@ -7,10 +7,25 @@ import Md from "./Md";
 import { defaultMarkdown } from "./DefaultMarkdown";
 
 export default function App() {
+	// 
+	const options = {
+		root: document.getElementById("deck"),
+		rootMargin: "0px",
+		threshold: 0.9,
+	};
 	// States
 	const [md, setMd] = useState(defaultMarkdown);
-	const [fronts, backs] = splitMarkdown(md);
 	const [fontSize, setFontSize] = useState("medium");
+	const [index, setIndex] = useState(1);
+	// Variables
+	const [cardFronts, cardBacks] = splitMarkdown(md);
+	const callback: IntersectionObserverCallback = (entries) => {
+		if (entries[0].isIntersecting) {
+			const currentCardIndex = /\d+/.exec(entries[0].target.id)![0];
+			setIndex(parseInt(currentCardIndex));
+		}	
+	};
+	const observerRef = useRef(new IntersectionObserver(callback, options));
 	// Effects
 	useEffect(() => {
 		const mdElements = document.getElementsByClassName("react-markdown");
@@ -18,6 +33,11 @@ export default function App() {
 			(md as HTMLElement).style.fontSize = fontSize;
 		}
 	}, [fontSize]);
+	useEffect(() => {
+		for (const card of document.getElementsByClassName("card")) {
+			observerRef.current.observe(card);
+		}
+	}, []);
 	// JSX
 	return (
 		<div className="App">
@@ -27,16 +47,19 @@ export default function App() {
 				<ToolbarItem id="font-size-picker" setFontSize={setFontSize} />
 				<ToolbarItem id="toolbar-toggler" />
 			</header>
-			<div className="deck">
+			<div id="deck">
 				{
-					fronts.map((front, i) => 
-						<Card position={1} key={i}>
+					cardFronts.map((front, i) => 
+						<Card position={i+1} key={i}>
 							<Md>{front}</Md>
-							<Md>{backs[i]}</Md>
+							<Md>{cardBacks[i]}</Md>
 						</Card>
 					)
 				}
 			</div>
+			<button id="card-index-display">
+				{index} of {cardFronts.length}
+			</button>
 		</div>
 	);
 }

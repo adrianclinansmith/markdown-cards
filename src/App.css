@@ -1,6 +1,6 @@
 .App {
 	height: 100%;
-	padding-left: 2%; /* Center card horizontally with scroll-snap */
+	padding-left: 1%; /* Center card horizontally with scroll-snap */
 }
 
 /* *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~ */
@@ -70,7 +70,7 @@
 /* Deck & Cards */
 /* *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~ */
 
-.deck {
+#deck {
 	height: 100%;
 	display: flex;
 	align-items: center;
@@ -129,6 +129,17 @@
 	/* background-color: blue; */
 	transform: rotateY(-180deg);
 	z-index: 1;
+}
+
+#card-index-display {
+	background-color: transparent;
+	border: none;
+	color: rgba(0, 0, 0, 0.2);
+	font-size: 30px;
+	inset: auto 0 20px; /* top left/right bottom */
+	margin: auto; 		/* center horizontally */
+	position: absolute;
+	width: fit-content;
 }
 
 /* *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~ */
