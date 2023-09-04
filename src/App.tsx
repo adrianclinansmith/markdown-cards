@@ -5,27 +5,20 @@ import ToolbarItem from "./ToolbarItem";
 import Card from "./Card";
 import Md from "./Md";
 import { defaultMarkdown } from "./DefaultMarkdown";
+import {displayObserver, reobserve} from "./utils.ts"
 
 export default function App() {
-	// 
-	const options = {
-		root: document.getElementById("deck"),
-		rootMargin: "0px",
-		threshold: 0.9,
-	};
 	// States
 	const [md, setMd] = useState(defaultMarkdown);
 	const [fontSize, setFontSize] = useState("medium");
 	const [index, setIndex] = useState(1);
 	// Variables
 	const [cardFronts, cardBacks] = splitMarkdown(md);
-	const callback: IntersectionObserverCallback = (entries) => {
-		if (entries[0].isIntersecting) {
-			const currentCardIndex = /\d+/.exec(entries[0].target.id)![0];
-			setIndex(parseInt(currentCardIndex));
-		}	
-	};
-	const observerRef = useRef(new IntersectionObserver(callback, options));
+	const observerCallback = (target: Element) => {
+		setIndex(parseInt(/\d+/.exec(target.id)![0]));
+	}
+	// Refs
+	const observerRef = useRef(displayObserver("deck", observerCallback));
 	// Effects
 	useEffect(() => {
 		const mdElements = document.getElementsByClassName("react-markdown");
@@ -107,9 +100,4 @@ function splitMarkdown(md: string) {
 		}
 	}
 	return [fronts, backs];
-}
-
-function reobserve(observer: IntersectionObserver, element: Element) {
-	observer.unobserve(element);
-	observer.observe(element);
 }

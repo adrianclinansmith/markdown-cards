@@ -2,6 +2,7 @@ import FileUploadIcon from '@mui/icons-material/FileUpload';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { ChangeEvent, Dispatch, SetStateAction, useEffect, useRef } from "react";
+import { displayObserver, reobserve } from "./utils.ts"
 
 interface Props {
 	id: "uploader" | "refresher" | "toolbar-toggler" | "font-size-picker";
@@ -10,21 +11,13 @@ interface Props {
 }
 
 export default function ToolbarItem({ id, setMd, setFontSize }: Props) {
-	const options = {
-		root: document.getElementById("font-size-picker"),
-		rootMargin: "0px",
-		threshold: 0.9,
+	const callback = (target: Element) => {
+		const fonts: {[key: string]: string} = {
+			M: "medium", L: "large", XL: "x-large"
+		};
+		setFontSize!(fonts[target.innerHTML]);
 	};
-	const callback: IntersectionObserverCallback = (entries) => {
-		if (entries[0].isIntersecting) {
-			const pickedFont = entries[0].target.innerHTML;
-			const fonts: {[key: string]: string} = {
-				M: "medium", L: "large", XL: "x-large"
-			};
-			setFontSize!(fonts[pickedFont]);
-		}	
-	};
-	const observerRef = useRef(new IntersectionObserver(callback, options));
+	const observerRef = useRef(displayObserver("font-size-picker", callback));
 	const mediumFontRef = useRef(null);
 	const largeFontRef = useRef(null);
 	const xLargeFontRef = useRef(null);
@@ -113,13 +106,4 @@ function toolbarTogglerOnClick(e: React.MouseEvent<HTMLButtonElement,
 MouseEvent>) {
 	e.currentTarget.parentElement?.classList.toggle("hide");
 	e.currentTarget.classList.toggle("prevent-hide");
-}
-
-// *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*
-// Helper Functions
-// *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*
-
-function reobserve(observer: IntersectionObserver, element: HTMLElement) {
-	observer.unobserve(element);
-	observer.observe(element);
 }
