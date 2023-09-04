@@ -29,15 +29,15 @@ export default function App() {
 	// Effects
 	useEffect(() => {
 		const mdElements = document.getElementsByClassName("react-markdown");
-		for (const md of mdElements) {
-			(md as HTMLElement).style.fontSize = fontSize;
+		for (const mdContent of mdElements) {
+			(mdContent as HTMLElement).style.fontSize = fontSize;
 		}
 	}, [fontSize]);
 	useEffect(() => {
-		for (const card of document.getElementsByClassName("card")) {
-			observerRef.current.observe(card);
+		for (const card of document.getElementsByClassName("card")) {	
+			reobserve(observerRef.current, card);
 		}
-	}, []);
+	}, [md]);
 	// JSX
 	return (
 		<div className="App">
@@ -107,4 +107,9 @@ function splitMarkdown(md: string) {
 		}
 	}
 	return [fronts, backs];
+}
+
+function reobserve(observer: IntersectionObserver, element: Element) {
+	observer.unobserve(element);
+	observer.observe(element);
 }
