@@ -29,3 +29,4 @@ https://katex.org/docs/issues.html
 - Save font-size in Window.localStorage (adjust font-size-picker accordingly)
 - make toolbar and toolbar-items' sizes more dynamic
 - Keep default markdown up to date
+- stop buttons from flashing bounding-box when clicked
