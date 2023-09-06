@@ -23,6 +23,9 @@ Here's a link for settings and troubleshooting:
 
 https://katex.org/docs/issues.html 
 
-# Issues
+# Issues / To-dos
 
-- Should bookmark the last opened file in the upload button
+- Bookmark the last opened file in the upload button
+- Save font-size in Window.localStorage (adjust font-size-picker accordingly)
+- make toolbar and toolbar-items' sizes more dynamic
+- Keep default markdown up to date
