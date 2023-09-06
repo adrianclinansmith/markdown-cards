@@ -1,3 +1,7 @@
+/* *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~ */
+/* App */
+/* *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~ */
+
 .App {
 	height: 100%;
 	padding-left: 1%; /* Center card horizontally with scroll-snap */
@@ -7,9 +11,10 @@
 /* Toolbar */
 /* *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~ */
 
-.toolbar {
+#toolbar {
 	--toolbar-height: 70px;
 	--toolbar-hide-duration: 1s;
+	box-sizing: border-box; /* height includes border */
 	display: flex;
 	gap: 2%;
 	position: absolute;
@@ -18,10 +23,10 @@
 	width: 100%;
 	height: var(--toolbar-height);
 	left: 0; /* Ignore parent's left padding */
-	border-bottom: 2px solid black;
+	border-bottom: 0.5px solid black;
 	transition-duration: var(--toolbar-hide-duration);
 }
-.toolbar.hide {
+#toolbar.hide {
 	transform: translateY(calc(var(--toolbar-height) * -1));
 }
 
@@ -99,7 +104,6 @@
 	transform-style: preserve-3d;
 	z-index: 2;
 }
-
 .card.flipped {
 	transform: rotateY(180deg); 
 }

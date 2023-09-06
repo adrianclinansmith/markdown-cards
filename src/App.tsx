@@ -34,7 +34,7 @@ export default function App() {
 	// JSX
 	return (
 		<div className="App">
-			<header className="toolbar">
+			<header id="toolbar">
 				<ToolbarItem id="uploader" setMd={setMd} />
 				<ToolbarItem id="refresher" />
 				<ToolbarItem id="font-size-picker" setFontSize={setFontSize} />
