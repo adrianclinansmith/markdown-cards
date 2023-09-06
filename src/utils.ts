@@ -12,7 +12,7 @@ callback: (target: Element) => void) {
 		}	
 	};
 	return new IntersectionObserver(observerCallback, options);
-	}
+}
 	
 export function reobserve(observer: IntersectionObserver, element: Element) {
 	observer.unobserve(element);

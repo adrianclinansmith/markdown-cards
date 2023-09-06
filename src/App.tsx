@@ -50,7 +50,10 @@ export default function App() {
 					)
 				}
 			</div>
-			<button id="card-index-display">
+			<button 
+				id="card-index-display" 
+				onClick={ e => e.currentTarget.classList.toggle("hide") }
+			>
 				{index} of {cardFronts.length}
 			</button>
 		</div>
