@@ -2,7 +2,7 @@ import FileUploadIcon from '@mui/icons-material/FileUpload';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { ChangeEvent, Dispatch, SetStateAction, useEffect, useRef } from "react";
-import { displayObserver, reobserve } from "./utils.ts"
+import { displayObserver, reobserve, resetDeck, toggleToolbar } from "./utils.ts";
 
 interface Props {
 	id: "uploader" | "refresher" | "toolbar-toggler" | "font-size-picker";
@@ -28,7 +28,6 @@ export default function ToolbarItem({ id, setMd, setFontSize }: Props) {
 			reobserve(observerRef.current, xLargeFontRef.current!);
 		}
 	}, [id]);
-	
 	// JSX
 	const className = "toolbar-item"
 	if (id === "uploader") {
@@ -80,30 +79,24 @@ export default function ToolbarItem({ id, setMd, setFontSize }: Props) {
 
 function uploaderOnChange(e: ChangeEvent<HTMLInputElement>, 
 setMd: Dispatch<SetStateAction<string>>) {
+	const uploaderInput = e.currentTarget;
 	const reader = new FileReader();
 	reader.onload = () => {
 		const md = reader.result as string;
 		setMd(md);
 	};
-	if (e.target?.files?.length) {
-		reader.readAsText(e.target.files[0]);
+	if (uploaderInput.files?.length) {
+		reader.readAsText(uploaderInput.files[0]);
 	}
 }
 
 function refresherOnClick(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
 	const toolbar = e.currentTarget.parentElement!;
-	const deck = toolbar.nextElementSibling!; 
-	toolbar.classList.add("hide");
-	toolbar.children[toolbar.children.length - 1].classList.add("prevent-hide");
-	for (const card of deck.children) {
-		card.classList.remove("flipped");
-	}
-	// deck.style.scrollSnapType = "none";
-	deck.scrollTo({left: 0, behavior: "smooth"});
+	toggleToolbar(e.currentTarget.parentElement!);
+	resetDeck(toolbar.nextElementSibling as HTMLElement);
 }
 
 function toolbarTogglerOnClick(e: React.MouseEvent<HTMLButtonElement,
 MouseEvent>) {
-	e.currentTarget.parentElement?.classList.toggle("hide");
-	e.currentTarget.classList.toggle("prevent-hide");
+	toggleToolbar(e.currentTarget.parentElement!);
 }

@@ -5,7 +5,7 @@ import ToolbarItem from "./ToolbarItem";
 import Card from "./Card";
 import Md from "./Md";
 import { defaultMarkdown } from "./DefaultMarkdown";
-import {displayObserver, reobserve} from "./utils.ts"
+import {displayObserver, reobserve, resetDeck, toggleToolbar } from "./utils.ts"
 
 export default function App() {
 	// States
@@ -30,6 +30,8 @@ export default function App() {
 		for (const card of document.getElementsByClassName("card")) {	
 			reobserve(observerRef.current, card);
 		}
+		toggleToolbar(document.getElementById("toolbar")!);
+		resetDeck(document.getElementById("deck")!);
 	}, [md]);
 	// JSX
 	return (
@@ -61,7 +63,7 @@ export default function App() {
 }
 
 // *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*
-// Helper Functions
+// Private Functions
 // *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*
 
 function isMathOrCodeDelimiter(s: string) {
