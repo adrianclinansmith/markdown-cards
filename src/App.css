@@ -7,6 +7,10 @@
 	padding-left: 1%; /* Center card horizontally with scroll-snap */
 }
 
+button {
+	-webkit-tap-highlight-color: transparent; /* No button flash on tap */
+}
+
 /* *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~ */
 /* Toolbar */
 /* *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~ */
