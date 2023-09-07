@@ -26,7 +26,14 @@ https://katex.org/docs/issues.html
 # Issues / To-dos
 
 - Bookmark the last opened file in the upload button
-- Save font-size in Window.localStorage (adjust font-size-picker accordingly)
+- Save font-size in Window.localStorage (adjust font-size-picker accordingly using Element.scrollIntoView)
 - make toolbar and toolbar-items' sizes more dynamic
 - Keep default markdown up to date
 - stop buttons from flashing bounding-box when clicked
+- make markdown links open in new tab
+- allow markdown images
+- center text for markdown headers (maybe center text when it's 3-or-less lines)
+- make tool-bar-item colors consistent 
+- logo doesn't appear on iOS, it's probably too big
+- for overflow cards, allow text to scroll to the top or bottom of card, but keep margins when it isn't scrolled
+- refresh cards when new cards are uploaded
