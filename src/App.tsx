@@ -106,3 +106,14 @@ function splitMarkdown(md: string) {
 	}
 	return [fronts, backs];
 }
+
+function getStoredFontSize() {
+	/* Return fontSize from localStorage, or return null if it doesn't exist or
+	there's a SecurityError (such as the user disabling storage) */
+	try {
+		const fs = window.localStorage.getItem("fontSize");
+		console.log("got stored font size: " + fs);
+	} catch /* SecurityError */ {
+		return null;	
+	}
+}

@@ -38,3 +38,4 @@ https://katex.org/docs/issues.html
 - on firefox, make scrollbar invisible when not in use
 - maybe change refresh button to reset button
 - add descriptions to the functions
+- add more font sizes
