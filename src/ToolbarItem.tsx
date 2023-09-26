@@ -15,6 +15,7 @@ export default function ToolbarItem({ id, setMd, setFontSize }: Props) {
 		const fonts: {[key: string]: string} = {
 			M: "medium", L: "large", XL: "x-large"
 		};
+		// storeFontSize(fonts[target.innerHTML]);
 		setFontSize!(fonts[target.innerHTML]);
 	};
 	const observerRef = useRef(displayObserver("font-size-picker", callback));
@@ -99,4 +100,19 @@ function refresherOnClick(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
 function toolbarTogglerOnClick(e: React.MouseEvent<HTMLButtonElement,
 MouseEvent>) {
 	toggleToolbar(e.currentTarget.parentElement!);
+}
+
+// *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*
+// Private Functions
+// *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*
+
+function storeFontSize(fontSize: string) {
+	/* Store fontSize in localStorage or do nothing if it can't be stored */
+	try {
+		window.localStorage.setItem("fontSize", fontSize);
+		console.log("stored: " + fontSize);
+	} catch /* storage is full or user disabled storage */ {
+		console.log("couldn't sore");
+		return;
+	}
 }

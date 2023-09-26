@@ -20,12 +20,12 @@ export default function App() {
 	// Refs
 	const observerRef = useRef(displayObserver("deck", observerCallback));
 	// Effects
-	useEffect(() => {
-		const mdElements = document.getElementsByClassName("react-markdown");
-		for (const mdContent of mdElements) {
-			(mdContent as HTMLElement).style.fontSize = fontSize;
-		}
-	}, [fontSize, md]);
+	// useEffect(() => {
+	// 	const mdElements = document.getElementsByClassName("react-markdown");
+	// 	for (const mdContent of mdElements) {
+	// 		(mdContent as HTMLElement).style.fontSize = fontSize;
+	// 	}
+	// }, [fontSize, md]);
 	useEffect(() => {
 		for (const card of document.getElementsByClassName("card")) {	
 			reobserve(observerRef.current, card);
@@ -42,7 +42,7 @@ export default function App() {
 				<ToolbarItem id="font-size-picker" setFontSize={setFontSize} />
 				<ToolbarItem id="toolbar-toggler" />
 			</header>
-			<div id="deck">
+			<div id="deck" style={{fontSize: fontSize}}>
 				{
 					cardFronts.map((front, i) => 
 						<Card position={i+1} key={i}>
@@ -107,13 +107,13 @@ function splitMarkdown(md: string) {
 	return [fronts, backs];
 }
 
-function getStoredFontSize() {
-	/* Return fontSize from localStorage, or return null if it doesn't exist or
-	there's a SecurityError (such as the user disabling storage) */
-	try {
-		const fs = window.localStorage.getItem("fontSize");
-		console.log("got stored font size: " + fs);
-	} catch /* SecurityError */ {
-		return null;	
-	}
-}
+// function getStoredFontSize() {
+// 	/* Return fontSize from localStorage, or return null if it doesn't exist or
+// 	there's a SecurityError (such as the user disabling storage) */
+// 	try {
+// 		const fs = window.localStorage.getItem("fontSize");
+// 		console.log("got stored font size: " + fs);
+// 	} catch /* SecurityError */ {
+// 		return null;	
+// 	}
+// }
