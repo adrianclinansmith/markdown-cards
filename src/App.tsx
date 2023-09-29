@@ -5,7 +5,7 @@ import ToolbarItem from "./ToolbarItem";
 import Card from "./Card";
 import Md from "./Md";
 import { defaultMarkdown } from "./DefaultMarkdown";
-import {displayObserver, reobserve, resetDeck, toggleToolbar } from "./utils.ts"
+import {displayObserver, resetDeck, toggleToolbar } from "./utils.ts"
 
 export default function App() {
 	// States
@@ -19,17 +19,13 @@ export default function App() {
 	}
 	// Refs
 	const observerRef = useRef(displayObserver("deck", observerCallback));
-	// Effects
-	// useEffect(() => {
-	// 	const mdElements = document.getElementsByClassName("react-markdown");
-	// 	for (const mdContent of mdElements) {
-	// 		(mdContent as HTMLElement).style.fontSize = fontSize;
-	// 	}
-	// }, [fontSize, md]);
+	const mdRef = useRef(md);
 	useEffect(() => {
-		for (const card of document.getElementsByClassName("card")) {	
-			reobserve(observerRef.current, card);
+		if (mdRef.current === md) { // not on update
+			return; 
 		}
+		// on update
+		mdRef.current = md;
 		toggleToolbar(document.getElementById("toolbar")!);
 		resetDeck(document.getElementById("deck")!);
 	}, [md]);
@@ -45,7 +41,7 @@ export default function App() {
 			<div id="deck" style={{fontSize: fontSize}}>
 				{
 					cardFronts.map((front, i) => 
-						<Card position={i+1} key={i}>
+						<Card position={i+1} key={i} observer={observerRef.current}>
 							<Md>{front}</Md>
 							<Md>{cardBacks[i]}</Md>
 						</Card>

@@ -1,17 +1,20 @@
 import { PointerEvent, TransitionEvent, ReactElement } from "react";
+import { reobserve } from "./utils";
 
 interface Props {
 	children: ReactElement[];
 	position: number;
+	observer: IntersectionObserver;
 }
 
-export default function Card({ children, position }: Props) {
+export default function Card({ children, position, observer }: Props) {
 	return (
 		<article 
 			className="card" 
 			id={`card-${position}`} 
 			onPointerUp={cardPointerUp}
 			onTransitionEnd={cardTransitionEnd} 
+			ref={ (el) => el ? reobserve(observer, el) : null }
 		>
 			<section className="card-front">{children[0]}</section>
 			<section className="card-back">{children[1]}</section>
