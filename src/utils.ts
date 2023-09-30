@@ -1,3 +1,5 @@
+import { useEffect, useRef } from "react";
+
 // *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*
 // Constants
 // *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*
@@ -5,6 +7,24 @@
 export const fontSizeMap: {[key: string]: string} = {
 	M: "medium", L: "large", XL: "x-large"
 };
+
+// *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*
+// Custom Hooks
+// *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*
+
+export function useEffectUpdateOnly(callback: (v:any)=>void, variable: any) {
+	/* useEffect only when variable updates */
+	const variableRef = useRef(variable);
+	useEffect(() => {
+		if (variableRef.current === variable) {  // not on update
+			return; 
+		}
+		// on update
+		variableRef.current = variable;
+		callback(variable)
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [variable]);
+}
 
 // *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*
 // Observer Functions

@@ -1,11 +1,11 @@
-import { useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import './App.css';
 import "katex/dist/katex.min.css";
 import ToolbarItem from "./ToolbarItem";
 import Card from "./Card";
 import Md from "./Md";
 import { defaultMarkdown } from "./DefaultMarkdown";
-import {displayObserver, resetDeck, toggleToolbar, fontSizeMap } from "./utils.ts"
+import {displayObserver, resetDeck, toggleToolbar, fontSizeMap, useEffectUpdateOnly } from "./utils.ts"
 
 // Get fontSize from localStorage or default to "medium"
 let initialFontSize = getStoredFontSize();
@@ -30,17 +30,11 @@ export default function App() {
 	}
 	// Refs
 	const observerRef = useRef(displayObserver("deck", observerCallback));
-	const mdRef = useRef(md);
 	// Effects
-	useEffect(() => {
-		if (mdRef.current === md) { // not on update
-			return; 
-		}
-		// on update
-		mdRef.current = md;
+	useEffectUpdateOnly(() => {
 		toggleToolbar(document.getElementById("toolbar")!);
 		resetDeck(document.getElementById("deck")!);
-	}, [md]);
+	}, md);
 	// JSX
 	return (
 		<div className="App">
