@@ -127,6 +127,7 @@ button {
 
 .card-front {
 	/* background-color: red; */
+	text-align: center;
 	z-index: 3;
 }
 
