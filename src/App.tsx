@@ -7,10 +7,20 @@ import Md from "./Md";
 import { defaultMarkdown } from "./DefaultMarkdown";
 import {displayObserver, resetDeck, toggleToolbar } from "./utils.ts"
 
+const storedFontSize = window.localStorage.getItem("fontSize");
+console.log("get localStorage: " + storedFontSize);
+
 export default function App() {
+	console.log("render app")
 	// States
 	const [md, setMd] = useState(defaultMarkdown);
-	const [fontSize, setFontSize] = useState("medium");
+	// const fs = useRef(window.localStorage.getItem("fontSize"));
+	// console.log(`fs: ${fs.current}`);
+	// const initialRender = useRef(true);
+	const [fontSize, setFontSize] = useState(storedFontSize ?? "medium");
+	// if (initialRender) {
+	// 	setFontSize(window.localStorage.getItem("fontSize") || "medium");
+	// }
 	const [index, setIndex] = useState(1);
 	// Variables
 	const [cardFronts, cardBacks] = splitMarkdown(md);
@@ -29,13 +39,17 @@ export default function App() {
 		toggleToolbar(document.getElementById("toolbar")!);
 		resetDeck(document.getElementById("deck")!);
 	}, [md]);
+	// useEffect(() => {
+	// 	console.log("###############")
+	// 	initialRender.current = false;
+	// }, []);
 	// JSX
 	return (
 		<div className="App">
 			<header id="toolbar">
 				<ToolbarItem id="uploader" setMd={setMd} />
 				<ToolbarItem id="refresher" />
-				<ToolbarItem id="font-size-picker" setFontSize={setFontSize} />
+				<ToolbarItem id="font-size-picker" fontSize={fontSize} setFontSize={setFontSize} />
 				<ToolbarItem id="toolbar-toggler" />
 			</header>
 			<div id="deck" style={{fontSize: fontSize}}>

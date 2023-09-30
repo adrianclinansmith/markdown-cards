@@ -23,7 +23,7 @@ Here's a link for settings and troubleshooting:
 
 https://katex.org/docs/issues.html 
 
-# Issues / To-dos
+# Features to add
 
 - Bookmark the last opened file in the upload button
 - Save font-size in Window.localStorage (adjust font-size-picker accordingly using Element.scrollIntoView)
@@ -39,3 +39,9 @@ https://katex.org/docs/issues.html
 - maybe change refresh button to reset button
 - add descriptions to the functions
 - add more font sizes
+
+# Bugs:
+
+- smooth scroll for deck doesn't always work on Safari desktop
+- when changing from multiple card file to single card file, the index label isn't updated.
+- On Safari desktop, localStorage doesn't seem to work

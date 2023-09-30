@@ -2,33 +2,65 @@ import FileUploadIcon from '@mui/icons-material/FileUpload';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { ChangeEvent, Dispatch, SetStateAction, useEffect, useRef } from "react";
-import { displayObserver, reobserve, resetDeck, toggleToolbar } from "./utils.ts";
+import { displayObserver, resetDeck, toggleToolbar } from "./utils.ts";
 
 interface Props {
 	id: "uploader" | "refresher" | "toolbar-toggler" | "font-size-picker";
 	setMd?: Dispatch<SetStateAction<string>>;
+	fontSize?: string;
 	setFontSize?: Dispatch<SetStateAction<string>>;
 }
 
-export default function ToolbarItem({ id, setMd, setFontSize }: Props) {
-	const callback = (target: Element) => {
-		const fonts: {[key: string]: string} = {
-			M: "medium", L: "large", XL: "x-large"
-		};
-		// storeFontSize(fonts[target.innerHTML]);
-		setFontSize!(fonts[target.innerHTML]);
-	};
-	const observerRef = useRef(displayObserver("font-size-picker", callback));
-	const mediumFontRef = useRef(null);
-	const largeFontRef = useRef(null);
-	const xLargeFontRef = useRef(null);
+export default function ToolbarItem({ id, setMd, fontSize, setFontSize }: Props) {
+	const firstRenderRef = useRef(true);
 	useEffect(() => {
-		if (id === "font-size-picker") {
-			reobserve(observerRef.current, mediumFontRef.current!);
-			reobserve(observerRef.current, largeFontRef.current!);
-			reobserve(observerRef.current, xLargeFontRef.current!);
+		if (!firstRenderRef.current) {
+			return;
 		}
-	}, [id]);
+		firstRenderRef.current = false;
+		if (id === "font-size-picker") {
+			console.log("@@@@ font-size-picker first render @@@@");
+			const fonts: {[key: string]: string} = {
+				M: "medium", L: "large", XL: "x-large"
+			};
+			const callback = (target: Element) => {
+				const fonts: {[key: string]: string} = {
+					M: "medium", L: "large", XL: "x-large"
+				};
+				storeFontSize(fonts[target.innerHTML]);
+				setFontSize!(fonts[target.innerHTML]);
+			};
+			const observer = displayObserver("font-size-picker", callback);
+			const fontSizePicker = document.getElementById("font-size-picker")!;
+			for (const fontOption of fontSizePicker.children) {
+				if (fonts[fontOption.innerHTML] === fontSize) {
+					fontOption.scrollIntoView({behavior: "instant"});
+				}
+			}
+			for (const fontOption of fontSizePicker.children) {
+				observer.observe(fontOption);
+			}
+		}
+	}, []);
+
+	// const mediumFontRef = useRef(null);
+	// const largeFontRef = useRef(null);
+	// const xLargeFontRef = useRef(null);
+	// useEffect(() => {
+	// 	if (id === "font-size-picker") { 
+	// 		console.log("fsp effect") 
+	// 		for (const fontOption of document.getElementById(id)!.children) {
+	// 			reobserve(observerRef.current, fontOption);
+	// 		}
+	// 	}
+	// }, [id]);
+	// useEffect(() => {
+	// 	if (id === "font-size-picker") {
+	// 		reobserve(observerRef.current, mediumFontRef.current!);
+	// 		reobserve(observerRef.current, largeFontRef.current!);
+	// 		reobserve(observerRef.current, xLargeFontRef.current!);
+	// 	}
+	// }, [id]);
 	// JSX
 	const className = "toolbar-item"
 	if (id === "uploader") {
@@ -54,10 +86,10 @@ export default function ToolbarItem({ id, setMd, setFontSize }: Props) {
 	}
 	else if (id === "font-size-picker") {
 		return (
-			<div className={className} id={id}>
-				<span ref={mediumFontRef}>M</span>
-				<span ref={largeFontRef}>L</span>
-				<span ref={xLargeFontRef}>XL</span>
+			<div className={className} id={id} ref={(el) => console.log(`ref for ${el?.className}`)}>
+				<span>M</span>
+				<span>L</span>
+				<span>XL</span>
 			</div>
 		)
 	}
@@ -111,8 +143,9 @@ function storeFontSize(fontSize: string) {
 	try {
 		window.localStorage.setItem("fontSize", fontSize);
 		console.log("stored: " + fontSize);
-	} catch /* storage is full or user disabled storage */ {
-		console.log("couldn't sore");
+	} catch /* localStorage is full or disabled by the user */ {
+		console.log("couldn't store fontSize in localStorage");
 		return;
 	}
+	console.log("storage: " + window.localStorage.getItem("fontSize"));
 }
