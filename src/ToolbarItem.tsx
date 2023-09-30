@@ -2,7 +2,7 @@ import FileUploadIcon from '@mui/icons-material/FileUpload';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { ChangeEvent, Dispatch, SetStateAction, useEffect, useRef } from "react";
-import { displayObserver, resetDeck, toggleToolbar } from "./utils.ts";
+import { displayObserver, fontSizeMap, resetDeck, toggleToolbar } from "./utils.ts";
 
 interface Props {
 	id: "uploader" | "refresher" | "toolbar-toggler" | "font-size-picker";
@@ -19,48 +19,22 @@ export default function ToolbarItem({ id, setMd, fontSize, setFontSize }: Props)
 		}
 		firstRenderRef.current = false;
 		if (id === "font-size-picker") {
-			console.log("@@@@ font-size-picker first render @@@@");
-			const fonts: {[key: string]: string} = {
-				M: "medium", L: "large", XL: "x-large"
+			const observerCallback = (target: Element) => {
+				storeFontSize(fontSizeMap[target.innerHTML]);
+				setFontSize!(fontSizeMap[target.innerHTML]);
 			};
-			const callback = (target: Element) => {
-				const fonts: {[key: string]: string} = {
-					M: "medium", L: "large", XL: "x-large"
-				};
-				storeFontSize(fonts[target.innerHTML]);
-				setFontSize!(fonts[target.innerHTML]);
-			};
-			const observer = displayObserver("font-size-picker", callback);
-			const fontSizePicker = document.getElementById("font-size-picker")!;
-			for (const fontOption of fontSizePicker.children) {
-				if (fonts[fontOption.innerHTML] === fontSize) {
-					fontOption.scrollIntoView({behavior: "instant"});
+			const observer = displayObserver(id, observerCallback);
+			const fontSizePicker = document.getElementById(id)!;
+			for (const pickerOption of fontSizePicker.children) {
+				if (fontSizeMap[pickerOption.innerHTML] === fontSize) {
+					pickerOption.scrollIntoView({behavior: "instant"});
 				}
 			}
-			for (const fontOption of fontSizePicker.children) {
-				observer.observe(fontOption);
+			for (const pickerOption of fontSizePicker.children) {
+				observer.observe(pickerOption);
 			}
 		}
 	}, []);
-
-	// const mediumFontRef = useRef(null);
-	// const largeFontRef = useRef(null);
-	// const xLargeFontRef = useRef(null);
-	// useEffect(() => {
-	// 	if (id === "font-size-picker") { 
-	// 		console.log("fsp effect") 
-	// 		for (const fontOption of document.getElementById(id)!.children) {
-	// 			reobserve(observerRef.current, fontOption);
-	// 		}
-	// 	}
-	// }, [id]);
-	// useEffect(() => {
-	// 	if (id === "font-size-picker") {
-	// 		reobserve(observerRef.current, mediumFontRef.current!);
-	// 		reobserve(observerRef.current, largeFontRef.current!);
-	// 		reobserve(observerRef.current, xLargeFontRef.current!);
-	// 	}
-	// }, [id]);
 	// JSX
 	const className = "toolbar-item"
 	if (id === "uploader") {
@@ -139,13 +113,11 @@ MouseEvent>) {
 // *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*
 
 function storeFontSize(fontSize: string) {
-	/* Store fontSize in localStorage or do nothing if it can't be stored */
+	/* Store fontSize in localStorage or log a message if it's unsuccessful */
 	try {
 		window.localStorage.setItem("fontSize", fontSize);
-		console.log("stored: " + fontSize);
-	} catch /* localStorage is full or disabled by the user */ {
-		console.log("couldn't store fontSize in localStorage");
+	} catch {
+		console.log("Couldn't store font-size in browser: you've disabled local-storage or it's full.");
 		return;
 	}
-	console.log("storage: " + window.localStorage.getItem("fontSize"));
 }

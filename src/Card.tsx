@@ -1,5 +1,4 @@
 import { PointerEvent, TransitionEvent, ReactElement } from "react";
-import { reobserve } from "./utils";
 
 interface Props {
 	children: ReactElement[];
@@ -14,7 +13,7 @@ export default function Card({ children, position, observer }: Props) {
 			id={`card-${position}`} 
 			onPointerUp={cardPointerUp}
 			onTransitionEnd={cardTransitionEnd} 
-			ref={ (el) => el ? reobserve(observer, el) : null }
+			ref={ (el) => refCallback(el, observer) }
 		>
 			<section className="card-front">{children[0]}</section>
 			<section className="card-back">{children[1]}</section>
@@ -38,4 +37,11 @@ function cardPointerUp(e: PointerEvent<HTMLDivElement>) {
 function cardTransitionEnd(e: TransitionEvent<HTMLDivElement>) {
 	const deck = (e.currentTarget as HTMLElement).parentElement!;
 	deck.style.scrollSnapType = "";
+}
+
+function refCallback(el: HTMLElement | null, observer: IntersectionObserver) {
+	if (el) {
+		observer.unobserve(el);
+		observer.observe(el);
+	}
 }
