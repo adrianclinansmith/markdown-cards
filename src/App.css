@@ -160,3 +160,11 @@ button {
 /* p {
 	overflow-x: hidden;
 } */
+.katex-display { overflow-x: scroll }
+/* Allow line breaks in display-mode */
+.katex-display > .katex { 
+	white-space: normal !important;
+	margin: 0.5em 0; 
+}
+/* Add space between broken lines: */
+.katex-display > .base { margin: 0.25em 0 }

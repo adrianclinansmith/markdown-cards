@@ -13,15 +13,13 @@ export const fontSizeMap: {[key: string]: string} = {
 // *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*
 
 export function useEffectUpdateOnly(callback: (v:any)=>void, variable: any) {
-	/* useEffect only when variable updates */
+	/* useEffect only when the variable updates */
 	const variableRef = useRef(variable);
 	useEffect(() => {
-		if (variableRef.current === variable) {  // not on update
-			return; 
+		if (variableRef.current !== variable) {
+			variableRef.current = variable;
+			callback(variable);
 		}
-		// on update
-		variableRef.current = variable;
-		callback(variable)
 	// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [variable]);
 }

@@ -45,3 +45,8 @@ https://katex.org/docs/issues.html
 
 - make markdown links open in new tab
 - allow markdown images
+- allow katex to line-break in display-mode
+
+# Links
+
+- [understanding dependencies in useEffect](https://blog.bitsrc.io/understanding-dependencies-in-useeffect-7afd4df37c96)
