@@ -12,16 +12,28 @@ export const fontSizeMap: {[key: string]: string} = {
 // Custom Hooks
 // *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*
 
-export function useEffectUpdateOnly(callback: (v:any)=>void, variable: any) {
-	/* useEffect only when the variable updates */
-	const variableRef = useRef(variable);
+export function useEffectFirstRenderOnly(callback: ()=>void) {
+	/* useEffect only on the first render */
+	const firstRenderRef = useRef(true);
 	useEffect(() => {
-		if (variableRef.current !== variable) {
-			variableRef.current = variable;
-			callback(variable);
+		if (firstRenderRef.current) {
+			firstRenderRef.current = false;
+			callback();
 		}
 	// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [variable]);
+	}, []);
+}
+
+export function useEffectUpdateOnly(callback: (v:any)=>void, v: any) {
+	/* useEffect only when the variable updates (not on the initial render) */
+	const vRef = useRef(v);
+	useEffect(() => {
+		if (vRef.current !== v) {
+			vRef.current = v;
+			callback(v);
+		}
+	// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [v]);
 }
 
 // *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*

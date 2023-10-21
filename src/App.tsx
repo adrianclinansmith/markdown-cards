@@ -5,8 +5,12 @@ import ToolbarItem from "./ToolbarItem";
 import Card from "./Card";
 import Md from "./Md";
 import { defaultMarkdown } from "./DefaultMarkdown";
-import {displayObserver, resetDeck, toggleToolbar, fontSizeMap, useEffectUpdateOnly } from "./utils.ts"
+import {displayObserver, resetDeck, toggleToolbar, fontSizeMap, useEffectUpdateOnly, useEffectFirstRenderOnly } from "./utils.ts"
 
+window.onresize = () => {
+	console.log("window resize"); // http://192.168.0.244:3000
+
+}
 // Get fontSize from localStorage or default to "medium"
 let initialFontSize = getStoredFontSize();
 if (!Object.values(fontSizeMap).includes(initialFontSize)) {
@@ -31,7 +35,11 @@ export default function App() {
 	// Refs
 	const observerRef = useRef(displayObserver("deck", observerCallback));
 	// Effects
+	useEffectFirstRenderOnly(() => {
+		console.log("useEffect FirstRenderOnly");
+	});
 	useEffectUpdateOnly(() => {
+		console.log("useEffect UpdateOnly");
 		toggleToolbar(document.getElementById("toolbar")!);
 		resetDeck(document.getElementById("deck")!);
 	}, md);
