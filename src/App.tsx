@@ -7,9 +7,14 @@ import Md from "./Md";
 import { defaultMarkdown } from "./DefaultMarkdown";
 import {displayObserver, resetDeck, toggleToolbar, fontSizeMap, useEffectUpdateOnly, useEffectFirstRenderOnly } from "./utils.ts"
 
+// *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*
+// On Script "/static/js/bundle.js" Load
+// *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*
+
+console.log("on page load");
+
 window.onresize = () => {
 	console.log("window resize"); // http://192.168.0.244:3000
-
 }
 // Get fontSize from localStorage or default to "medium"
 let initialFontSize = getStoredFontSize();
@@ -36,10 +41,10 @@ export default function App() {
 	const observerRef = useRef(displayObserver("deck", observerCallback));
 	// Effects
 	useEffectFirstRenderOnly(() => {
-		console.log("useEffect FirstRenderOnly");
+		console.log("useEffectFirstRenderOnly");
 	});
 	useEffectUpdateOnly(() => {
-		console.log("useEffect UpdateOnly");
+		console.log("useEffectUpdateOnly");
 		toggleToolbar(document.getElementById("toolbar")!);
 		resetDeck(document.getElementById("deck")!);
 	}, md);
@@ -59,7 +64,11 @@ export default function App() {
 			<div id="deck" style={{fontSize: fontSize}}>
 				{
 					cardFronts.map((front, i) => 
-						<Card position={i+1} key={i} observer={observerRef.current}>
+						<Card 
+							position={i+1} 
+							key={i} 
+							observer={observerRef.current}
+						>
 							<Md>{front}</Md>
 							<Md>{cardBacks[i]}</Md>
 						</Card>

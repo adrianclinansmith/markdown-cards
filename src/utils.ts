@@ -12,8 +12,8 @@ export const fontSizeMap: {[key: string]: string} = {
 // Custom Hooks
 // *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*
 
+/** useEffect only on the first render */
 export function useEffectFirstRenderOnly(callback: ()=>void) {
-	/* useEffect only on the first render */
 	const firstRenderRef = useRef(true);
 	useEffect(() => {
 		if (firstRenderRef.current) {
@@ -24,8 +24,8 @@ export function useEffectFirstRenderOnly(callback: ()=>void) {
 	}, []);
 }
 
+/** useEffect only when the variable updates (not on the initial render) */
 export function useEffectUpdateOnly(callback: (v:any)=>void, v: any) {
-	/* useEffect only when the variable updates (not on the initial render) */
 	const vRef = useRef(v);
 	useEffect(() => {
 		if (vRef.current !== v) {
@@ -40,9 +40,16 @@ export function useEffectUpdateOnly(callback: (v:any)=>void, v: any) {
 // Observer Functions
 // *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*
 
+/** 
+ * A specialized IntersectionObserver: the callback fires with a single entry
+ * when the target is almost entirely intersecting the root. The callback
+ * doesn't fire when isIntersecting is false, and any subsequent entries get 
+ * ignored. 
+ */
 export function displayObserver(
 rootId: string, 
-callback: (target: Element) => void) {
+callback: (target: Element) => void
+) {
 	const options = {
 		root: document.getElementById(rootId),
 		rootMargin: "0px",
