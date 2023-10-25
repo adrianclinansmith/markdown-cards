@@ -2,7 +2,7 @@ import FileUploadIcon from '@mui/icons-material/FileUpload';
 import RefreshIcon from '@mui/icons-material/Refresh';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { ChangeEvent, Dispatch, SetStateAction, useEffect, useRef } from "react";
-import { displayObserver, fontSizeMap, resetDeck, toggleToolbar } from "./utils.ts";
+import { displayObserver, fontSizeMap, resetDeck, toggleToolbar, useEffect_FirstRenderOnly } from "./utils.ts";
 
 interface Props {
 	id: "uploader" | "refresher" | "toolbar-toggler" | "font-size-picker";
@@ -12,12 +12,8 @@ interface Props {
 }
 
 export default function ToolbarItem({ id, setMd, fontSize, setFontSize }: Props) {
-	const firstRenderRef = useRef(true);
-	useEffect(() => {
-		if (!firstRenderRef.current) {
-			return;
-		}
-		firstRenderRef.current = false;
+	// Effects
+	useEffect_FirstRenderOnly(() => {
 		if (id === "font-size-picker") {
 			const observerCallback = (target: Element) => {
 				storeFontSize(fontSizeMap[target.innerHTML]);
@@ -34,7 +30,7 @@ export default function ToolbarItem({ id, setMd, fontSize, setFontSize }: Props)
 				observer.observe(pickerOption);
 			}
 		}
-	}, []);
+	});
 	// JSX
 	const className = "toolbar-item"
 	if (id === "uploader") {
