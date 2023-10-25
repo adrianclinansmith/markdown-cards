@@ -13,7 +13,7 @@ export const fontSizeMap: {[key: string]: string} = {
 // *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*
 
 /** useEffect only on the first render */
-export function useEffectFirstRenderOnly(callback: ()=>void) {
+export function useEffect_FirstRenderOnly(callback: ()=>void) {
 	const firstRenderRef = useRef(true);
 	useEffect(() => {
 		if (firstRenderRef.current) {
@@ -24,8 +24,8 @@ export function useEffectFirstRenderOnly(callback: ()=>void) {
 	}, []);
 }
 
-/** useEffect only when the variable updates (not on the initial render) */
-export function useEffectUpdateOnly(callback: (v:any)=>void, v: any) {
+/** useEffect only when variable v updates (not on the initial render) */
+export function useEffect_UpdateOnly(callback: (v:any)=>void, v: any) {
 	const vRef = useRef(v);
 	useEffect(() => {
 		if (vRef.current !== v) {

@@ -14,7 +14,7 @@ export default function Md({ children }: Props) {
 	return (
 		<ReactMarkdown
 			className="react-markdown"
-			components={{ code: MdCodeBlock }}
+			components={{ code: MdCodeBlock, a: MdLink }}
 			remarkPlugins={[remarkGfm, remarkMath]}
 			rehypePlugins={[rehypeKatex]}
 		>
@@ -45,4 +45,22 @@ CodeProps) {
 			{...props}
 		/>
 	) 
+}
+
+interface MdLinkProps {
+	children?: string;
+	href?: string;
+}
+
+function MdLink({children, href}: MdLinkProps) {
+	return (
+		<a
+			href={href}
+			rel="noreferrer"
+			target="_blank"
+			onPointerUp={ (e) => e.stopPropagation() }
+		>
+			{children}
+		</a>
+	);
 }

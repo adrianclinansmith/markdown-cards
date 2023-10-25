@@ -5,7 +5,10 @@ import ToolbarItem from "./ToolbarItem";
 import Card from "./Card";
 import Md from "./Md";
 import { defaultMarkdown } from "./DefaultMarkdown";
-import {displayObserver, resetDeck, toggleToolbar, fontSizeMap, useEffectUpdateOnly, useEffectFirstRenderOnly } from "./utils.ts"
+import {
+	displayObserver, resetDeck, toggleToolbar, fontSizeMap,
+	useEffect_UpdateOnly, useEffect_FirstRenderOnly 
+} from "./utils.ts"
 
 // *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*
 // On Script "/static/js/bundle.js" Load
@@ -40,10 +43,16 @@ export default function App() {
 	// Refs
 	const observerRef = useRef(displayObserver("deck", observerCallback));
 	// Effects
-	useEffectFirstRenderOnly(() => {
+	useEffect_FirstRenderOnly(() => {
 		console.log("useEffectFirstRenderOnly");
+		window.screen.orientation.onchange = () => {
+			const currentCard = document.getElementById(`card-${index}`);
+			if (currentCard) {
+				currentCard.scrollIntoView({ behavior: "instant" });
+			}
+		}
 	});
-	useEffectUpdateOnly(() => {
+	useEffect_UpdateOnly(() => {
 		console.log("useEffectUpdateOnly");
 		toggleToolbar(document.getElementById("toolbar")!);
 		resetDeck(document.getElementById("deck")!);
