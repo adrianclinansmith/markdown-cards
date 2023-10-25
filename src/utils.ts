@@ -67,7 +67,8 @@ callback: (target: Element) => void
 // DOM Manipulation Functions
 // *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*
 
-export function resetDeck(deck: HTMLElement) {
+export function resetDeck() {
+	const deck = document.getElementById("deck")!;
 	for (const card of deck.children) {
 		card.classList.remove("flipped");
 	}

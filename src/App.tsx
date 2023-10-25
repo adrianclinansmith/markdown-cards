@@ -55,7 +55,7 @@ export default function App() {
 	useEffect_UpdateOnly(() => {
 		console.log("useEffectUpdateOnly");
 		toggleToolbar();
-		resetDeck(document.getElementById("deck")!);
+		resetDeck();
 	}, md);
 	// JSX
 	return (

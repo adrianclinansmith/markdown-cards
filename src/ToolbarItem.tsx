@@ -53,7 +53,11 @@ export default function ToolbarItem({ id, setMd, fontSize, setFontSize }: Props)
 	}
 	else if (id === "refresher") {
 		return (
-			<button className={className} id={id} onClick={refresherOnClick}>
+			<button 
+				className={className} 
+				id={id} 
+				onClick={ () => {toggleToolbar(); resetDeck();} }
+			>
 				<RefreshIcon fontSize="large"/>
 			</button>
 		)
@@ -95,12 +99,6 @@ setMd: Dispatch<SetStateAction<string>>) {
 	if (uploaderInput.files?.length) {
 		reader.readAsText(uploaderInput.files[0]);
 	}
-}
-
-function refresherOnClick(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
-	const toolbar = e.currentTarget.parentElement!;
-	toggleToolbar();
-	resetDeck(toolbar.nextElementSibling as HTMLElement);
 }
 
 // *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*
