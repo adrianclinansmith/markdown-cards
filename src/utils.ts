@@ -75,8 +75,9 @@ export function resetDeck(deck: HTMLElement) {
 	deck.scrollTo({left: 0, behavior: "smooth"});
 }
 
-export function toggleToolbar(toolbar: HTMLElement) {
-	const toolbarToggler = toolbar.children[toolbar.children.length - 1];
+export function toggleToolbar() {
+	const toolbar = document.getElementById("toolbar")!;
+	const toolbarToggler = document.getElementById("toolbar-toggler")!;
 	toolbar.classList.toggle("hide");
 	toolbarToggler.classList.toggle("prevent-hide");
 }

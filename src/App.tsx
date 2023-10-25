@@ -54,7 +54,7 @@ export default function App() {
 	});
 	useEffect_UpdateOnly(() => {
 		console.log("useEffectUpdateOnly");
-		toggleToolbar(document.getElementById("toolbar")!);
+		toggleToolbar();
 		resetDeck(document.getElementById("deck")!);
 	}, md);
 	// JSX

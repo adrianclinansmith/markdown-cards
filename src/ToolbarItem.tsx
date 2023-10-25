@@ -72,7 +72,7 @@ export default function ToolbarItem({ id, setMd, fontSize, setFontSize }: Props)
 			<button
 				className={className}
 				id={id}
-				onClick={toolbarTogglerOnClick}
+				onClick={toggleToolbar}
 			>
 				<KeyboardArrowUpIcon fontSize="large"/>
 			</button>
@@ -99,13 +99,8 @@ setMd: Dispatch<SetStateAction<string>>) {
 
 function refresherOnClick(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
 	const toolbar = e.currentTarget.parentElement!;
-	toggleToolbar(e.currentTarget.parentElement!);
+	toggleToolbar();
 	resetDeck(toolbar.nextElementSibling as HTMLElement);
-}
-
-function toolbarTogglerOnClick(e: React.MouseEvent<HTMLButtonElement,
-MouseEvent>) {
-	toggleToolbar(e.currentTarget.parentElement!);
 }
 
 // *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*
