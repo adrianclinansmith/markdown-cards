@@ -45,6 +45,7 @@ https://katex.org/docs/issues.html
 
 - make markdown links open in new tab
 - allow markdown images
+- create markdown audio 
 - allow katex to line-break in display-mode
 
 # Links
