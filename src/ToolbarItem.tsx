@@ -36,7 +36,7 @@ export default function ToolbarItem({ id, setMd, fontSize, setFontSize }: Props)
 	if (id === "uploader") {
 		return (
 			<label className={className} id={id} htmlFor="file-input">
-				<FileUploadIcon fontSize="large"/>
+				<FileUploadIcon color="action" fontSize="large"/>
 				<input
 					accept=".md,.txt"
 					hidden
@@ -54,7 +54,7 @@ export default function ToolbarItem({ id, setMd, fontSize, setFontSize }: Props)
 				id={id} 
 				onClick={ () => {toggleToolbar(); resetDeck();} }
 			>
-				<UndoIcon fontSize="large"/>
+				<UndoIcon color="action" fontSize="large"/>
 			</button>
 		)
 	}
@@ -74,7 +74,7 @@ export default function ToolbarItem({ id, setMd, fontSize, setFontSize }: Props)
 				id={id}
 				onClick={toggleToolbar}
 			>
-				<KeyboardArrowUpIcon fontSize="large"/>
+				<KeyboardArrowUpIcon color="action" fontSize="large"/>
 			</button>
 		)
 	}
