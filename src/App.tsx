@@ -62,7 +62,7 @@ export default function App() {
 		<div className="App">
 			<header id="toolbar">
 				<ToolbarItem id="uploader" setMd={setMd} />
-				<ToolbarItem id="refresher" />
+				<ToolbarItem id="resetter" />
 				<ToolbarItem 
 					id="font-size-picker" 
 					fontSize={fontSize} 

@@ -1,11 +1,11 @@
 import FileUploadIcon from '@mui/icons-material/FileUpload';
-import RefreshIcon from '@mui/icons-material/Refresh';
+import UndoIcon from '@mui/icons-material/Undo';
 import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
-import { ChangeEvent, Dispatch, SetStateAction, useEffect, useRef } from "react";
+import { ChangeEvent, Dispatch, SetStateAction } from "react";
 import { displayObserver, fontSizeMap, resetDeck, toggleToolbar, useEffect_FirstRenderOnly } from "./utils.ts";
 
 interface Props {
-	id: "uploader" | "refresher" | "toolbar-toggler" | "font-size-picker";
+	id: "uploader" | "resetter" | "toolbar-toggler" | "font-size-picker";
 	setMd?: Dispatch<SetStateAction<string>>;
 	fontSize?: string;
 	setFontSize?: Dispatch<SetStateAction<string>>;
@@ -47,14 +47,14 @@ export default function ToolbarItem({ id, setMd, fontSize, setFontSize }: Props)
 			</label>
 		)
 	}
-	else if (id === "refresher") {
+	else if (id === "resetter") {
 		return (
 			<button 
 				className={className} 
 				id={id} 
 				onClick={ () => {toggleToolbar(); resetDeck();} }
 			>
-				<RefreshIcon fontSize="large"/>
+				<UndoIcon fontSize="large"/>
 			</button>
 		)
 	}
