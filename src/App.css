@@ -16,7 +16,7 @@ button {
 /* *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~ */
 
 #toolbar {
-	--toolbar-height: 70px;
+	--toolbar-height: min(20vw, 70px); /* 100/n (n = num toolbar-items + 1) */
 	--toolbar-hide-duration: 1s;
 	box-sizing: border-box; /* height includes border */
 	display: flex;
@@ -35,15 +35,11 @@ button {
 }
 
 .toolbar-item {
-	display: flex;
-	align-items: center;
-	justify-content: center;
-	flex-grow: 1;
-	max-width: var(--toolbar-height);
+	width: var(--toolbar-height);
 	background-color: transparent;
 	border: none;
 	opacity: 0.3;
-	/* background-color: red; */
+	background-color: green;
 }
 
 #toolbar-toggler {

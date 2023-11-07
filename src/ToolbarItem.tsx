@@ -1,6 +1,6 @@
-import FileUploadIcon from '@mui/icons-material/FileUpload';
-import UndoIcon from '@mui/icons-material/Undo';
-import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
+// import FileUploadIcon from '@mui/icons-material/FileUpload';
+// import UndoIcon from '@mui/icons-material/Undo';
+// import KeyboardArrowUpIcon from '@mui/icons-material/KeyboardArrowUp';
 import { ChangeEvent, Dispatch, SetStateAction } from "react";
 import { displayObserver, fontSizeMap, resetDeck, toggleToolbar, useEffect_FirstRenderOnly } from "./utils.ts";
 
@@ -36,7 +36,7 @@ export default function ToolbarItem({ id, setMd, fontSize, setFontSize }: Props)
 	if (id === "uploader") {
 		return (
 			<label className={className} id={id} htmlFor="file-input">
-				<FileUploadIcon color="action" fontSize="large"/>
+				<SvgIcon item={id}/>
 				<input
 					accept=".md,.txt"
 					hidden
@@ -54,7 +54,8 @@ export default function ToolbarItem({ id, setMd, fontSize, setFontSize }: Props)
 				id={id} 
 				onClick={ () => {toggleToolbar(); resetDeck();} }
 			>
-				<UndoIcon color="action" fontSize="large"/>
+				{/* <UndoIcon color="action" fontSize="large"/> */}
+				<SvgIcon item={id}/>
 			</button>
 		)
 	}
@@ -74,7 +75,8 @@ export default function ToolbarItem({ id, setMd, fontSize, setFontSize }: Props)
 				id={id}
 				onClick={toggleToolbar}
 			>
-				<KeyboardArrowUpIcon color="action" fontSize="large"/>
+				{/* <KeyboardArrowUpIcon color="action" fontSize="large"/> */}
+				<SvgIcon item={id}/>
 			</button>
 		)
 	}
@@ -109,4 +111,27 @@ function storeFontSize(fontSize: string) {
 		console.log("Couldn't store font-size in browser: you've disabled local-storage or it's full.");
 		return;
 	}
+}
+
+interface SvgIconProps {
+	item: string;
+}
+
+function SvgIcon({ item }: SvgIconProps) {
+	let d;
+	if (item === "resetter") {
+		d = "M12.5 8c-2.65 0-5.05.99-6.9 2.6L2 7v9h9l-3.62-3.62c1.39-1.16 3.16-1.88 5.12-1.88 3.54 0 6.55 2.31 7.6 5.5l2.37-.78C21.08 11.03 17.15 8 12.5 8z";
+	}
+	else if (item === "uploader") {
+		d = "M9 16h6v-6h4l-7-7-7 7h4zm-4 2h14v2H5z";
+	}
+	else if (item === "toolbar-toggler") {
+		d = "M7.41 15.41 12 10.83l4.59 4.58L18 14l-6-6-6 6z";
+	}
+	const s: React.CSSProperties = { height: "100%", backgroundColor: "red"};
+	return (
+		<svg focusable="false" viewBox="0 0 24 24" style={s}>
+			<path d={d} />
+		</svg>
+	)
 }
