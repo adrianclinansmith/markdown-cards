@@ -16,7 +16,7 @@ button {
 /* *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~ */
 
 #toolbar {
-	--toolbar-height: min(20vw, 70px); /* 100/n (n = num toolbar-items + 1) */
+	--toolbar-height: min(20vw, 70px); /* 100/n (n = num ToolbarItems + 1) */
 	--toolbar-hide-duration: 1s;
 	box-sizing: border-box; /* height includes border */
 	position: absolute;
