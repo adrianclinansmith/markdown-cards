@@ -58,7 +58,11 @@ button {
 #font-size-picker {
 	overflow-y: scroll;
 	scroll-snap-type: y mandatory;
-	line-height: var(--toolbar-height); /* Vertically align text */
+	scrollbar-width: none; /* firefox only */
+	line-height: var(--toolbar-height); /* vertically align text */
+}
+#font-size-picker::-webkit-scrollbar { /* chrome & safari only */
+	display: none; 
 }
 
 #font-size-picker > div {
@@ -79,7 +83,11 @@ button {
 	gap: 5%;
 	overflow: scroll;
 	scroll-snap-type: x mandatory;
+	scrollbar-width: none; /* firefox only */
 	perspective: 1000px;
+}
+#deck::-webkit-scrollbar { /* chrome & safari only */
+	display: none; 
 }
 
 .card {
