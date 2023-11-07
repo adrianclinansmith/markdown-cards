@@ -62,9 +62,9 @@ export default function ToolbarItem({ id, setMd, fontSize, setFontSize }: Props)
 	else if (id === "font-size-picker") {
 		return (
 			<div className={className} id={id} ref={(el) => console.log(`ref for ${el?.className}`)}>
-				<span>M</span>
-				<span>L</span>
-				<span>XL</span>
+				<div>M</div>
+				<div>L</div>
+				<div>XL</div>
 			</div>
 		)
 	}
@@ -128,9 +128,8 @@ function SvgIcon({ item }: SvgIconProps) {
 	else if (item === "toolbar-toggler") {
 		d = "M7.41 15.41 12 10.83l4.59 4.58L18 14l-6-6-6 6z";
 	}
-	const s: React.CSSProperties = { height: "100%", backgroundColor: "red"};
 	return (
-		<svg focusable="false" viewBox="0 0 24 24" style={s}>
+		<svg focusable="false" viewBox="0 0 24 24">
 			<path d={d} />
 		</svg>
 	)
