@@ -65,7 +65,7 @@ button {
 	display: none; 
 }
 
-#font-size-picker > div {
+#font-size-picker > .font-size-option {
 	text-align: center;
 	scroll-snap-align: start;
 	font-size: calc(var(--toolbar-height) / 2.5); /* fits "XL" */

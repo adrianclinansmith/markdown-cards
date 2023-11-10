@@ -4,9 +4,21 @@ import { useEffect, useRef } from "react";
 // Constants
 // *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*
 
-export const fontSizeMap: {[key: string]: string} = {
-	XS: "x-small", S: "small", M: "medium", L: "large", XL: "x-large"
-};
+/** 
+ * Return a font-size for the given acronym: 
+ * "XS" to "x-small", "S" to "small", "M" to "medium", etc.
+ * If the acronym is invalid then return "medium". 
+*/
+export function acronymToFontSize(acronym: string) {
+	const acronymToSize: {[key: string]: string} = {
+		XS: "x-small", S: "small", M: "medium", L: "large", XL: "x-large"
+	};
+	return acronymToSize[acronym] ?? "medium";
+}
+
+// export const fontSizeMap: {[key: string]: string} = {
+// 	XS: "x-small", S: "small", M: "medium", L: "large", XL: "x-large"
+// };
 
 // *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*
 // Custom Hooks

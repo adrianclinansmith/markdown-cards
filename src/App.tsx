@@ -6,7 +6,7 @@ import Card from "./Card";
 import Md from "./Md";
 import { defaultMarkdown } from "./DefaultMarkdown";
 import {
-	displayObserver, resetDeck, toggleToolbar, fontSizeMap,
+	displayObserver, resetDeck, toggleToolbar, acronymToFontSize,
 	useEffect_UpdateOnly, useEffect_FirstRenderOnly 
 } from "./utils.ts"
 
@@ -19,11 +19,8 @@ console.log("on page load");
 window.onresize = () => {
 	console.log("window resize"); // http://192.168.0.244:3000
 }
-// Get fontSize from localStorage or default to "medium"
-let initialFontSize = getStoredFontSize();
-if (!Object.values(fontSizeMap).includes(initialFontSize)) {
-	initialFontSize = "medium";
-}
+// Get font-size from localStorage or default to "medium"
+let initialFontSize = acronymToFontSize(getStoredFontSizeAcronym());
 
 // *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*
 // App Component
@@ -139,9 +136,11 @@ function splitMarkdown(md: string) {
 	return [fronts, backs];
 }
 
-function getStoredFontSize() {
-	/* Return fontSize from localStorage, or the empty string if it's not there
-	or an error ocurred */
+/** 
+ * Return fontSize from localStorage, or the empty string if it's not there
+ * or an error ocurred 
+*/
+function getStoredFontSizeAcronym() {
 	try {
 		return window.localStorage.getItem("fontSize") ?? "";
 	} catch /* SecurityError: localStorage is probably disabled */ {

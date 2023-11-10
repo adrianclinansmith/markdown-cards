@@ -1,5 +1,5 @@
 import { ChangeEvent, Dispatch, SetStateAction } from "react";
-import { displayObserver, fontSizeMap, resetDeck, toggleToolbar, useEffect_FirstRenderOnly } from "./utils.ts";
+import { displayObserver, acronymToFontSize, resetDeck, toggleToolbar, useEffect_FirstRenderOnly } from "./utils.ts";
 
 type ToolbarItemId = 
 "uploader" | "resetter" | "toolbar-toggler" | "font-size-picker";
@@ -16,13 +16,13 @@ export default function ToolbarItem({ id, setMd, fontSize, setFontSize }: Props)
 	useEffect_FirstRenderOnly(() => {
 		if (id === "font-size-picker") {
 			const observerCallback = (target: Element) => {
-				storeFontSize(fontSizeMap[target.innerHTML]);
-				setFontSize!(fontSizeMap[target.innerHTML]);
+				storeFontSizeAcronym(target.innerHTML);
+				setFontSize!(acronymToFontSize(target.innerHTML));
 			};
 			const observer = displayObserver(id, observerCallback);
 			const fontSizePicker = document.getElementById(id)!;
 			for (const pickerOption of fontSizePicker.children) {
-				if (fontSizeMap[pickerOption.innerHTML] === fontSize) {
+				if (acronymToFontSize(pickerOption.innerHTML) === fontSize) {
 					pickerOption.scrollIntoView({behavior: "instant"});
 				}
 			}
@@ -62,11 +62,11 @@ export default function ToolbarItem({ id, setMd, fontSize, setFontSize }: Props)
 	else if (id === "font-size-picker") {
 		return (
 			<div className={className} id={id}>
-				<div>XS</div>
-				<div>S</div>
-				<div>M</div>
-				<div>L</div>
-				<div>XL</div>
+				<div className="font-size-option">XS</div>
+				<div className="font-size-option">S</div>
+				<div className="font-size-option">M</div>
+				<div className="font-size-option">L</div>
+				<div className="font-size-option">XL</div>
 			</div>
 		)
 	}
@@ -129,7 +129,7 @@ setMd: Dispatch<SetStateAction<string>>) {
 // Private Functions
 // *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*
 
-function storeFontSize(fontSize: string) {
+function storeFontSizeAcronym(fontSize: string) {
 	/* Store fontSize in localStorage or log a message if it's unsuccessful */
 	try {
 		window.localStorage.setItem("fontSize", fontSize);
