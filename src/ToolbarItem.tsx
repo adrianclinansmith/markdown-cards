@@ -61,7 +61,9 @@ export default function ToolbarItem({ id, setMd, fontSize, setFontSize }: Props)
 	}
 	else if (id === "font-size-picker") {
 		return (
-			<div className={className} id={id} ref={(el) => console.log(`ref for ${el?.className}`)}>
+			<div className={className} id={id}>
+				<div>XS</div>
+				<div>S</div>
 				<div>M</div>
 				<div>L</div>
 				<div>XL</div>

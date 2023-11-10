@@ -5,7 +5,7 @@ import { useEffect, useRef } from "react";
 // *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*
 
 export const fontSizeMap: {[key: string]: string} = {
-	M: "medium", L: "large", XL: "x-large"
+	XS: "x-small", S: "small", M: "medium", L: "large", XL: "x-large"
 };
 
 // *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*
