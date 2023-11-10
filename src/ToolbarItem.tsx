@@ -1,5 +1,5 @@
 import { ChangeEvent, Dispatch, SetStateAction } from "react";
-import { displayObserver, acronymToFontSize, resetDeck, toggleToolbar, useEffect_FirstRenderOnly } from "./utils.ts";
+import { displayObserver, resetDeck, toggleToolbar, useEffect_FirstRenderOnly, FontSizeAcronym } from "./utils.ts";
 
 type ToolbarItemId = 
 "uploader" | "resetter" | "toolbar-toggler" | "font-size-picker";
@@ -7,8 +7,8 @@ type ToolbarItemId =
 interface Props {
 	id: ToolbarItemId;
 	setMd?: Dispatch<SetStateAction<string>>;
-	fontSize?: string;
-	setFontSize?: Dispatch<SetStateAction<string>>;
+	fontSize?: FontSizeAcronym;
+	setFontSize?: Dispatch<SetStateAction<FontSizeAcronym>>;
 }
 
 export default function ToolbarItem({ id, setMd, fontSize, setFontSize }: Props) {
@@ -17,12 +17,12 @@ export default function ToolbarItem({ id, setMd, fontSize, setFontSize }: Props)
 		if (id === "font-size-picker") {
 			const observerCallback = (target: Element) => {
 				storeFontSizeAcronym(target.innerHTML);
-				setFontSize!(acronymToFontSize(target.innerHTML));
+				setFontSize!(target.innerHTML as FontSizeAcronym);
 			};
 			const observer = displayObserver(id, observerCallback);
 			const fontSizePicker = document.getElementById(id)!;
 			for (const pickerOption of fontSizePicker.children) {
-				if (acronymToFontSize(pickerOption.innerHTML) === fontSize) {
+				if (pickerOption.innerHTML === fontSize) {
 					pickerOption.scrollIntoView({behavior: "instant"});
 				}
 			}
@@ -136,7 +136,7 @@ function storeFontSizeAcronym(acronym: string) {
 	try {
 		window.localStorage.setItem("fontSizeAcronym", acronym);
 	} catch {
-		console.log("Couldn't store the font-size in your browser: either local-storage is full or you've disabled it.");
+		console.log("Couldn't store the font-size in your browser: local-storage is either full or disabled.");
 		return;
 	}
 }

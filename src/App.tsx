@@ -6,8 +6,8 @@ import Card from "./Card";
 import Md from "./Md";
 import { defaultMarkdown } from "./DefaultMarkdown";
 import {
-	displayObserver, resetDeck, toggleToolbar, acronymToFontSize,
-	useEffect_UpdateOnly, useEffect_FirstRenderOnly 
+	displayObserver, resetDeck, toggleToolbar,
+	useEffect_UpdateOnly, useEffect_FirstRenderOnly, FontSizeAcronym 
 } from "./utils.ts"
 
 // *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*
@@ -19,8 +19,8 @@ console.log("on page load");
 window.onresize = () => {
 	console.log("window resize"); // http://192.168.0.244:3000
 }
-// Get font-size from localStorage or default to "medium"
-let initialFontSize = acronymToFontSize(getStoredFontSizeAcronym());
+// Get fontSizeAcronym from localStorage or default to "M"
+const initialFontSize = getStoredFontSizeAcronym() as FontSizeAcronym;
 
 // *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*
 // App Component
@@ -67,7 +67,7 @@ export default function App() {
 				/>
 				<ToolbarItem id="toolbar-toggler" />
 			</header>
-			<div id="deck" style={{fontSize: fontSize}}>
+			<div id="deck" style={{fontSize: expand(fontSize)}}>
 				{
 					cardFronts.map((front, i) => 
 						<Card 
@@ -137,13 +137,27 @@ function splitMarkdown(md: string) {
 }
 
 /** 
- * Return fontSize from localStorage, or the empty string if it's not there
- * or an error ocurred 
+ * Return fontSizeAcronym from localStorage, otherwise return "M" if it's not 
+ * there or an error ocurred 
 */
 function getStoredFontSizeAcronym() {
+	let result: string | null;
 	try {
-		return window.localStorage.getItem("fontSizeAcronym") ?? "";
+		result = window.localStorage.getItem("fontSizeAcronym");
 	} catch /* SecurityError: localStorage is probably disabled */ {
-		return "";	
+		return "M";	
 	}
+	return ["XS","S","M","L","XL"].some(el => el === result) ? result : "M";
+}
+
+/** 
+ * Return a font-size for the given acronym: 
+ * "XS" to "x-small", "S" to "small", "M" to "medium", etc.
+ * If the acronym is invalid then return "medium". 
+*/
+function expand(acronym: FontSizeAcronym) {
+	const lookupTable: {[key: string]: string} = {
+		XS: "x-small", S: "small", M: "medium", L: "large", XL: "x-large"
+	};
+	return lookupTable[acronym] ?? "medium";
 }
