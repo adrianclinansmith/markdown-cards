@@ -129,12 +129,14 @@ setMd: Dispatch<SetStateAction<string>>) {
 // Private Functions
 // *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*
 
-function storeFontSizeAcronym(fontSize: string) {
-	/* Store fontSize in localStorage or log a message if it's unsuccessful */
+/** 
+ * Store fontSizeAcronym in localStorage or log a message if it's unsuccessful 
+*/
+function storeFontSizeAcronym(acronym: string) {
 	try {
-		window.localStorage.setItem("fontSize", fontSize);
+		window.localStorage.setItem("fontSizeAcronym", acronym);
 	} catch {
-		console.log("Couldn't store font-size in browser: you've disabled local-storage or it's full.");
+		console.log("Couldn't store the font-size in your browser: either local-storage is full or you've disabled it.");
 		return;
 	}
 }

@@ -142,7 +142,7 @@ function splitMarkdown(md: string) {
 */
 function getStoredFontSizeAcronym() {
 	try {
-		return window.localStorage.getItem("fontSize") ?? "";
+		return window.localStorage.getItem("fontSizeAcronym") ?? "";
 	} catch /* SecurityError: localStorage is probably disabled */ {
 		return "";	
 	}
