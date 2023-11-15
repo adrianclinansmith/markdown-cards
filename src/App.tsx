@@ -10,11 +10,8 @@ import {
 	useEffect_UpdateOnly, useEffect_FirstRenderOnly, FontSizeAcronym 
 } from "./utils.ts"
 
+//#region On Script Load (/static/js/bundle.js)
 // *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*
-// On Script "/static/js/bundle.js" Load
-// *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*
-
-console.log("on page load");
 
 window.onresize = () => {
 	console.log("window resize"); // http://192.168.0.244:3000
@@ -22,8 +19,8 @@ window.onresize = () => {
 // Get fontSizeAcronym from localStorage or default to "M"
 const initialFontSize = getStoredFontSizeAcronym() as FontSizeAcronym;
 
-// *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*
-// App Component
+//#endregion
+//#region Component
 // *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*
 
 export default function App() {
@@ -91,8 +88,8 @@ export default function App() {
 	);
 }
 
-// *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*
-// Private Functions
+//#endregion
+//#region Private Functions
 // *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*
 
 function isMathOrCodeDelimiter(s: string) {
@@ -161,3 +158,5 @@ function expand(acronym: FontSizeAcronym) {
 	};
 	return lookupTable[acronym] ?? "medium";
 }
+
+//#endregion
