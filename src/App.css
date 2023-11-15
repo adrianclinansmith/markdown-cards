@@ -159,15 +159,19 @@ button {
 /* Markdown */
 /* *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~ */
 
-/* Prevent side-scroll on KaTex (not ideal) */
-/* p {
-	overflow-x: hidden;
-} */
-.katex-display { overflow-x: scroll }
-/* Allow line breaks in display-mode */
-.katex-display > .katex { 
+.react-markdown img {
+	max-width: 100%;
+}
+
+.katex-display { 
+	overflow-x: scroll 
+}
+
+.katex-display > .katex { /* Allow line breaks in display-mode */
 	white-space: normal !important;
 	margin: 0.5em 0; 
 }
-/* Add space between broken lines: */
-.katex-display > .base { margin: 0.25em 0 }
+
+.katex-display > .base { 
+	margin: 0.25em 0 /* Add space between broken lines */
+}
