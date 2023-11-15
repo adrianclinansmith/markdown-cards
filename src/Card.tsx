@@ -1,4 +1,4 @@
-import { PointerEvent, TransitionEvent, ReactElement } from "react";
+import { TransitionEvent, ReactElement } from "react";
 
 interface Props {
 	children: ReactElement[];
@@ -11,7 +11,7 @@ export default function Card({ children, position, observer }: Props) {
 		<article 
 			className="card" 
 			id={`card-${position}`} 
-			onPointerUp={cardPointerUp}
+			onClick={cardClick}
 			onTransitionEnd={cardTransitionEnd} 
 			ref={ (el) => refCallback(el, observer) }
 		>
@@ -25,7 +25,7 @@ export default function Card({ children, position, observer }: Props) {
 // Event Handlers
 // *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*
 
-function cardPointerUp(e: PointerEvent<HTMLDivElement>) {
+function cardClick(e: React.MouseEvent<HTMLElement, MouseEvent>) {
 	const deck = e.currentTarget.parentElement!;
 	/* Chrome: scroll-snap-type causes the next card to snap in and out
 	when the current card is flipped */

@@ -124,8 +124,9 @@ button {
 	width: fit-content;
 	max-width: 80%;
 	height: fit-content;
-	max-height: 80%;
+	max-height: 100%;
 	overflow-y: scroll; /* Breaks backface-visibility if defined on parent */ 
+	mask-image: linear-gradient(transparent 0%, black 5%, black 95%, transparent 100%);
 }
 
 .card-front {
