@@ -1,8 +1,8 @@
-import { ChangeEvent, Dispatch, SetStateAction } from "react";
+import { ChangeEvent, Dispatch, SetStateAction, useState } from "react";
 import { displayObserver, resetDeck, toggleToolbar, useEffect_FirstRenderOnly, FontSizeAcronym } from "./utils.ts";
 
 type ToolbarItemId = 
-"uploader" | "resetter" | "toolbar-toggler" | "font-size-picker";
+"uploader" | "resetter" | "toolbar-toggler" | "font-size-picker" | "speaker";
 
 interface Props {
 	id: ToolbarItemId;
@@ -12,6 +12,8 @@ interface Props {
 }
 
 export default function ToolbarItem({ id, setMd, fontSize, setFontSize }: Props) {
+	// States
+	const [speakerOn, setSpeakerOn] = useState(false);
 	// Effects
 	useEffect_FirstRenderOnly(() => {
 		if (id === "font-size-picker") {
@@ -54,7 +56,6 @@ export default function ToolbarItem({ id, setMd, fontSize, setFontSize }: Props)
 				id={id} 
 				onClick={ () => {toggleToolbar(); resetDeck();} }
 			>
-				{/* <UndoIcon color="action" fontSize="large"/> */}
 				<SvgIcon item={id}/>
 			</button>
 		)
@@ -70,15 +71,34 @@ export default function ToolbarItem({ id, setMd, fontSize, setFontSize }: Props)
 			</div>
 		)
 	}
-	else /* className === toolbar-toggler */ {
+	else if (id === "toolbar-toggler") {
 		return (
 			<button
 				className={className}
 				id={id}
 				onClick={toggleToolbar}
 			>
-				{/* <KeyboardArrowUpIcon color="action" fontSize="large"/> */}
 				<SvgIcon item={id}/>
+			</button>
+		)
+	}
+	else {
+		return (
+			<button
+				className={className}
+				id={id}
+				onClick={ () => {
+					if (!speakerOn) {	
+						const hello = ["你好", "Nǐ hǎo"]
+						const lang = ["zh-Hans", "zh-Latn-pinyin"]
+						const utterance = new SpeechSynthesisUtterance(hello[0]);
+						utterance.lang = lang[0]
+						window.speechSynthesis.speak(utterance);
+					}
+					setSpeakerOn(!speakerOn);
+				}}
+			>
+				<SvgIcon item={id} on={speakerOn}/>
 			</button>
 		)
 	}
@@ -90,22 +110,33 @@ export default function ToolbarItem({ id, setMd, fontSize, setFontSize }: Props)
 
 interface SvgIconProps {
 	item: ToolbarItemId;
+	on?: boolean;
 }
 
-function SvgIcon({ item }: SvgIconProps) {
-	let d = "";
+/**
+ * Returns an SVG Icon taken from https://mui.com/material-ui/material-icons/
+ */
+function SvgIcon({ item, on }: SvgIconProps) {
+	let SvgPath = <path d=""/>;
 	if (item === "uploader") {
-		d = "M9 16h6v-6h4l-7-7-7 7h4zm-4 2h14v2H5z";
+		SvgPath = <path d="M9 16h6v-6h4l-7-7-7 7h4zm-4 2h14v2H5z"/>;
 	}
 	else if (item === "resetter") {
-		d = `M12.5 8c-2.65 0-5.05.99-6.9 2.6L2 7v9h9l-3.62-3.62c1.39-1.16
-		3.16-1.88 5.12-1.88 3.54 0 6.55 2.31 7.6 5.5l2.37-.78C21.08 11.03
-		17.15 8 12.5 8z`;
+		SvgPath = <path d="M12.5 8c-2.65 0-5.05.99-6.9 2.6L2 7v9h9l-3.62-3.62c1.39-1.16 3.16-1.88 5.12-1.88 3.54 0 6.55 2.31 7.6 5.5l2.37-.78C21.08 11.03 17.15 8 12.5 8z"/>;
 	}
 	else if (item === "toolbar-toggler") {
-		d = "M7.41 15.41 12 10.83l4.59 4.58L18 14l-6-6-6 6z";
+		SvgPath = <path d="M7.41 15.41 12 10.83l4.59 4.58L18 14l-6-6-6 6z"/>;
 	}
-	return <svg focusable="false" viewBox="0 0 24 24"> <path d={d}/> </svg>;
+	else if (item === "speaker" && on) {
+		SvgPath = <>
+			<circle cx="9" cy="9" r="4"/>
+			<path d="M9 15c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4zm7.76-9.64-1.68 1.69c.84 1.18.84 2.71 0 3.89l1.68 1.69c2.02-2.02 2.02-5.07 0-7.27zM20.07 2l-1.63 1.63c2.77 3.02 2.77 7.56 0 10.74L20.07 16c3.9-3.89 3.91-9.95 0-14z"/>
+		</>;
+	}
+	else if (item === "speaker" && !on) {
+		SvgPath = <path d="M12.99 9.18c0-.06.01-.12.01-.18 0-2.21-1.79-4-4-4-.06 0-.12.01-.18.01l4.17 4.17zm-6.1-3.56L4.27 3 3 4.27l2.62 2.62C5.23 7.5 5 8.22 5 9c0 2.21 1.79 4 4 4 .78 0 1.5-.23 2.11-.62L19.73 21 21 19.73l-8.62-8.62-5.49-5.49zM9 15c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4zm7.76-9.64-1.68 1.69c.84 1.18.84 2.71 0 3.89l1.68 1.69c2.02-2.02 2.02-5.07 0-7.27zM20.07 2l-1.63 1.63c2.77 3.02 2.77 7.56 0 10.74L20.07 16c3.9-3.89 3.91-9.95 0-14z"/>
+	}
+	return <svg focusable="false" viewBox="0 0 24 24">{SvgPath}</svg>;
 }
 
 // *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*

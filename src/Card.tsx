@@ -1,12 +1,15 @@
 import { TransitionEvent, ReactElement } from "react";
+import Md from "./Md";
 
 interface Props {
-	children: ReactElement[];
 	position: number;
 	observer: IntersectionObserver;
+	frontContent: string;
+	backContent:string;
 }
 
-export default function Card({ children, position, observer }: Props) {
+export default function Card({ position, observer, frontContent, backContent }: Props) {
+	console.log("card render")
 	return (
 		<article 
 			className="card" 
@@ -15,8 +18,8 @@ export default function Card({ children, position, observer }: Props) {
 			onTransitionEnd={cardTransitionEnd} 
 			ref={ (el) => refCallback(el, observer) }
 		>
-			<section className="card-front">{children[0]}</section>
-			<section className="card-back">{children[1]}</section>
+			<section className="card-front"><Md>{frontContent}</Md></section>
+			<section className="card-back"><Md>{backContent}</Md></section>
 		</article>	
 	)
 }

@@ -3,7 +3,6 @@ import './App.css';
 import "katex/dist/katex.min.css";
 import ToolbarItem from "./ToolbarItem";
 import Card from "./Card";
-import Md from "./Md";
 import { defaultMarkdown } from "./DefaultMarkdown";
 import {
 	displayObserver, resetDeck, toggleToolbar,
@@ -63,18 +62,18 @@ export default function App() {
 					setFontSize={setFontSize}
 				/>
 				<ToolbarItem id="toolbar-toggler" />
+				<ToolbarItem id="speaker" />
 			</header>
 			<div id="deck" style={{fontSize: expand(fontSize)}}>
 				{
 					cardFronts.map((front, i) => 
 						<Card 
-							position={i+1} 
 							key={i} 
 							observer={observerRef.current}
-						>
-							<Md>{front}</Md>
-							<Md>{cardBacks[i]}</Md>
-						</Card>
+							position={i+1} 
+							frontContent={front}
+							backContent={cardBacks[i]}
+						/>
 					)
 				}
 			</div>

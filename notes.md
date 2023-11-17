@@ -50,3 +50,4 @@ https://katex.org/docs/issues.html
 # Links
 
 - [understanding dependencies in useEffect](https://blog.bitsrc.io/understanding-dependencies-in-useeffect-7afd4df37c96)
+- [lang tags for chinese and pinyin](https://sites.psu.edu/symbolcodes/languages/asia/chinese/)
