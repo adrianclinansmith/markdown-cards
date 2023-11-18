@@ -28,6 +28,7 @@ export default function App() {
 	const [md, setMd] = useState(defaultMarkdown);
 	const [fontSize, setFontSize] = useState(initialFontSize);
 	const [index, setIndex] = useState(1);
+	const [speak, setSpeak] = useState(false);
 	// Variables
 	const [cardFronts, cardBacks] = splitMarkdown(md);
 	const observerCallback = (target: Element) => {
@@ -62,7 +63,7 @@ export default function App() {
 					setFontSize={setFontSize}
 				/>
 				<ToolbarItem id="toolbar-toggler" />
-				<ToolbarItem id="speaker" />
+				<ToolbarItem id="speaker" speak={speak} setSpeak={setSpeak} />
 			</header>
 			<div id="deck" style={{fontSize: expand(fontSize)}}>
 				{
@@ -73,6 +74,7 @@ export default function App() {
 							position={i+1} 
 							frontContent={front}
 							backContent={cardBacks[i]}
+							speak={speak}
 						/>
 					)
 				}

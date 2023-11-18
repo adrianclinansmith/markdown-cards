@@ -1,4 +1,4 @@
-import { TransitionEvent, ReactElement } from "react";
+import { TransitionEvent } from "react";
 import Md from "./Md";
 
 interface Props {
@@ -6,15 +6,16 @@ interface Props {
 	observer: IntersectionObserver;
 	frontContent: string;
 	backContent:string;
+	speak: boolean;
 }
 
-export default function Card({ position, observer, frontContent, backContent }: Props) {
+export default function Card({ position, observer, frontContent, backContent, speak }: Props) {
 	console.log("card render")
 	return (
 		<article 
 			className="card" 
 			id={`card-${position}`} 
-			onClick={cardClick}
+			onClick={ (e) => cardClick(e, frontContent, backContent, speak) }
 			onTransitionEnd={cardTransitionEnd} 
 			ref={ (el) => refCallback(el, observer) }
 		>
@@ -28,20 +29,41 @@ export default function Card({ position, observer, frontContent, backContent }: 
 // Event Handlers
 // *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*
 
-function cardClick(e: React.MouseEvent<HTMLElement, MouseEvent>) {
+/**
+ * Flip the card and speak it's content if speak is turned on
+ */
+function cardClick(e: React.MouseEvent<HTMLElement, MouseEvent>, frontContent: string, backContent: string, speak: boolean) {
 	const deck = e.currentTarget.parentElement!;
-	/* Chrome: scroll-snap-type causes the next card to snap in and out
-	when the current card is flipped */
+	/* For Chrome: scroll-snap-type must be disabled when card flips */
 	deck.style.scrollSnapType = "none"; 
 	const card = e.currentTarget;
 	card.classList.toggle("flipped");
+	if (!speak) {
+		return;
+	}
+	/* Say what's on the card */
+	let utterance: SpeechSynthesisUtterance;
+	if (card.classList.contains("flipped")) {
+		utterance = new SpeechSynthesisUtterance(backContent);
+		utterance.lang = "zh-Hans"; // simplified Chinese
+	}
+	else {
+		utterance = new SpeechSynthesisUtterance(frontContent);
+	}
+	window.speechSynthesis.speak(utterance);
 }
 
+/**
+ * Turn scroll-snap-type back on after card has flipped
+ */
 function cardTransitionEnd(e: TransitionEvent<HTMLDivElement>) {
-	const deck = (e.currentTarget as HTMLElement).parentElement!;
-	deck.style.scrollSnapType = "";
+	const deck = e.currentTarget.parentElement!;
+	deck.style.scrollSnapType = ""; // return to App.css scroll-snap-type
 }
 
+/**
+ * Watch the card with an observer to know when it's on screen.
+ */
 function refCallback(el: HTMLElement | null, observer: IntersectionObserver) {
 	if (el) {
 		observer.unobserve(el);

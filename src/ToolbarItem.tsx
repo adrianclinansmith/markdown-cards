@@ -1,4 +1,4 @@
-import { ChangeEvent, Dispatch, SetStateAction, useState } from "react";
+import { ChangeEvent, Dispatch, SetStateAction } from "react";
 import { displayObserver, resetDeck, toggleToolbar, useEffect_FirstRenderOnly, FontSizeAcronym } from "./utils.ts";
 
 type ToolbarItemId = 
@@ -9,11 +9,11 @@ interface Props {
 	setMd?: Dispatch<SetStateAction<string>>;
 	fontSize?: FontSizeAcronym;
 	setFontSize?: Dispatch<SetStateAction<FontSizeAcronym>>;
+	speak?: boolean;
+	setSpeak?: Dispatch<SetStateAction<boolean>>;
 }
 
-export default function ToolbarItem({ id, setMd, fontSize, setFontSize }: Props) {
-	// States
-	const [speakerOn, setSpeakerOn] = useState(false);
+export default function ToolbarItem({ id, setMd, fontSize, setFontSize, speak, setSpeak }: Props) {
 	// Effects
 	useEffect_FirstRenderOnly(() => {
 		if (id === "font-size-picker") {
@@ -87,18 +87,9 @@ export default function ToolbarItem({ id, setMd, fontSize, setFontSize }: Props)
 			<button
 				className={className}
 				id={id}
-				onClick={ () => {
-					if (!speakerOn) {	
-						const hello = ["你好", "Nǐ hǎo"]
-						const lang = ["zh-Hans", "zh-Latn-pinyin"]
-						const utterance = new SpeechSynthesisUtterance(hello[0]);
-						utterance.lang = lang[0]
-						window.speechSynthesis.speak(utterance);
-					}
-					setSpeakerOn(!speakerOn);
-				}}
+				onClick={ () => {speakerOnClick(speak!, setSpeak!)} }
 			>
-				<SvgIcon item={id} on={speakerOn}/>
+				<SvgIcon item={id} strikethrough={!speak}/>
 			</button>
 		)
 	}
@@ -110,13 +101,13 @@ export default function ToolbarItem({ id, setMd, fontSize, setFontSize }: Props)
 
 interface SvgIconProps {
 	item: ToolbarItemId;
-	on?: boolean;
+	strikethrough?: boolean;
 }
 
 /**
  * Returns an SVG Icon taken from https://mui.com/material-ui/material-icons/
  */
-function SvgIcon({ item, on }: SvgIconProps) {
+function SvgIcon({ item, strikethrough }: SvgIconProps) {
 	let SvgPath = <path d=""/>;
 	if (item === "uploader") {
 		SvgPath = <path d="M9 16h6v-6h4l-7-7-7 7h4zm-4 2h14v2H5z"/>;
@@ -127,13 +118,13 @@ function SvgIcon({ item, on }: SvgIconProps) {
 	else if (item === "toolbar-toggler") {
 		SvgPath = <path d="M7.41 15.41 12 10.83l4.59 4.58L18 14l-6-6-6 6z"/>;
 	}
-	else if (item === "speaker" && on) {
+	else if (item === "speaker" && !strikethrough) {
 		SvgPath = <>
 			<circle cx="9" cy="9" r="4"/>
 			<path d="M9 15c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4zm7.76-9.64-1.68 1.69c.84 1.18.84 2.71 0 3.89l1.68 1.69c2.02-2.02 2.02-5.07 0-7.27zM20.07 2l-1.63 1.63c2.77 3.02 2.77 7.56 0 10.74L20.07 16c3.9-3.89 3.91-9.95 0-14z"/>
 		</>;
 	}
-	else if (item === "speaker" && !on) {
+	else if (item === "speaker" && strikethrough) {
 		SvgPath = <path d="M12.99 9.18c0-.06.01-.12.01-.18 0-2.21-1.79-4-4-4-.06 0-.12.01-.18.01l4.17 4.17zm-6.1-3.56L4.27 3 3 4.27l2.62 2.62C5.23 7.5 5 8.22 5 9c0 2.21 1.79 4 4 4 .78 0 1.5-.23 2.11-.62L19.73 21 21 19.73l-8.62-8.62-5.49-5.49zM9 15c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4zm7.76-9.64-1.68 1.69c.84 1.18.84 2.71 0 3.89l1.68 1.69c2.02-2.02 2.02-5.07 0-7.27zM20.07 2l-1.63 1.63c2.77 3.02 2.77 7.56 0 10.74L20.07 16c3.9-3.89 3.91-9.95 0-14z"/>
 	}
 	return <svg focusable="false" viewBox="0 0 24 24">{SvgPath}</svg>;
@@ -143,6 +134,9 @@ function SvgIcon({ item, on }: SvgIconProps) {
 // Event Handlers
 // *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*
 
+/**
+ * Read the selected markdown file
+ */
 function uploaderOnChange(e: ChangeEvent<HTMLInputElement>, 
 setMd: Dispatch<SetStateAction<string>>) {
 	const uploaderInput = e.currentTarget;
@@ -154,6 +148,20 @@ setMd: Dispatch<SetStateAction<string>>) {
 	if (uploaderInput.files?.length) {
 		reader.readAsText(uploaderInput.files[0]);
 	}
+}
+
+/**
+ * Toggle the speaker (speech synthesis)
+ */
+function speakerOnClick(speak: boolean, setSpeak: Dispatch<SetStateAction<boolean>>) {
+	if (speak) {	
+		window.speechSynthesis.cancel();
+	}
+	else {
+		const utterance = new SpeechSynthesisUtterance("speaker on");
+		window.speechSynthesis.speak(utterance);
+	}
+	setSpeak!(!speak);
 }
 
 // *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*
