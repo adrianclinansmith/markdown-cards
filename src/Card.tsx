@@ -45,7 +45,8 @@ function cardClick(e: React.MouseEvent<HTMLElement, MouseEvent>, frontContent: s
 	let utterance: SpeechSynthesisUtterance;
 	if (card.classList.contains("flipped")) {
 		utterance = new SpeechSynthesisUtterance(backContent);
-		utterance.lang = "zh-Hans"; // simplified Chinese
+		utterance.lang = "zh-Hans"; // "zh-Hans" is simplified Chinese 
+		// "zh-Hans-Latn" should be for Hanyu Pinyin, but it doesn't work
 	}
 	else {
 		utterance = new SpeechSynthesisUtterance(frontContent);
@@ -54,15 +55,15 @@ function cardClick(e: React.MouseEvent<HTMLElement, MouseEvent>, frontContent: s
 }
 
 /**
- * Turn scroll-snap-type back on after card has flipped
+ * Turn scroll-snap-type back on after the card has flipped
  */
 function cardTransitionEnd(e: TransitionEvent<HTMLDivElement>) {
 	const deck = e.currentTarget.parentElement!;
-	deck.style.scrollSnapType = ""; // return to App.css scroll-snap-type
+	deck.style.scrollSnapType = ""; // enable App.css scroll-snap-type
 }
 
 /**
- * Watch the card with an observer to know when it's on screen.
+ * Watch the card with an observer to know when it's on screen
  */
 function refCallback(el: HTMLElement | null, observer: IntersectionObserver) {
 	if (el) {
