@@ -30,7 +30,7 @@ export default function Card({ position, observer, frontContent, backContent, sp
 // *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*
 
 /**
- * Flip the card and speak it's content if speak is turned on
+ * Flip the card (and speak if it's on)
  */
 function cardClick(e: React.MouseEvent<HTMLElement, MouseEvent>, frontContent: string, backContent: string, speak: boolean) {
 	const deck = e.currentTarget.parentElement!;
@@ -42,15 +42,16 @@ function cardClick(e: React.MouseEvent<HTMLElement, MouseEvent>, frontContent: s
 		return;
 	}
 	/* Say what's on the card */
-	let utterance: SpeechSynthesisUtterance;
+	let utterance = new SpeechSynthesisUtterance();
 	if (card.classList.contains("flipped")) {
-		utterance = new SpeechSynthesisUtterance(backContent);
+		utterance.text = backContent;
 		utterance.lang = "zh-Hans"; // "zh-Hans" is simplified Chinese 
 		// "zh-Hans-Latn" should be for Hanyu Pinyin, but it doesn't work
 	}
 	else {
-		utterance = new SpeechSynthesisUtterance(frontContent);
+		utterance.text = frontContent;
 	}
+	utterance.rate = 0.7;
 	window.speechSynthesis.speak(utterance);
 }
 
