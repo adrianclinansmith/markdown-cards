@@ -5,8 +5,8 @@ import ToolbarItem from "./ToolbarItem";
 import Card from "./Card";
 import { defaultMarkdown } from "./DefaultMarkdown";
 import {
-	displayObserver, resetDeck, toggleToolbar,
-	useEffect_UpdateOnly, useEffect_FirstRenderOnly, FontSizeAcronym 
+	displayObserver, resetDeck, toggleToolbar, useEffect_UpdateOnly,
+	FontSizeAcronym 
 } from "./utils.ts"
 
 //#region On Script Load (/static/js/bundle.js)
@@ -23,31 +23,28 @@ const initialFontSize = getStoredFontSizeAcronym() as FontSizeAcronym;
 // *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*
 
 export default function App() {
-	console.log("render app")
+	console.log("\n\nrender app")
 	// States
 	const [md, setMd] = useState(defaultMarkdown);
 	const [fontSize, setFontSize] = useState(initialFontSize);
-	const [index, setIndex] = useState(1);
 	const [speak, setSpeak] = useState(false);
 	// Variables
 	const [cardFronts, cardBacks] = splitMarkdown(md);
 	const observerCallback = (target: Element) => {
-		setIndex(parseInt(/\d+/.exec(target.id)![0]));
+		const index = parseInt(/\d+/.exec(target.id)![0]);
+		const indexDisplay = document.getElementById("card-index-display")!;
+		const newText = indexDisplay.textContent!.replace(/\d+/, `${index}`);
+		indexDisplay.textContent = newText;
 	}
 	// Refs
-	const observerRef = useRef(displayObserver("deck", observerCallback));
+	const cardObserverRef = useRef(displayObserver("deck", observerCallback));
 	// Effects
-	useEffect_FirstRenderOnly(() => {
-		console.log("useEffectFirstRenderOnly");
-		window.screen.orientation.onchange = () => {
-			const currentCard = document.getElementById(`card-${index}`);
-			if (currentCard) {
-				currentCard.scrollIntoView({ behavior: "instant" });
-			}
-		}
-	});
 	useEffect_UpdateOnly(() => {
 		console.log("useEffectUpdateOnly");
+		const indexDisplay = document.getElementById("card-index-display")!;
+		const numberOfCards = `${cardFronts.length}`;
+		const text = indexDisplay.textContent!.replace(/\d+$/, numberOfCards);
+		indexDisplay.textContent = text;
 		toggleToolbar();
 		resetDeck();
 	}, md);
@@ -70,7 +67,7 @@ export default function App() {
 					cardFronts.map((front, i) => 
 						<Card 
 							key={i} 
-							observer={observerRef.current}
+							observer={cardObserverRef.current}
 							position={i+1} 
 							frontContent={front}
 							backContent={cardBacks[i]}
@@ -83,7 +80,7 @@ export default function App() {
 				id="card-index-display" 
 				onClick={ e => e.currentTarget.classList.toggle("hide") }
 			>
-				{index} of {cardFronts.length}
+				1 of {cardFronts.length}
 			</button>
 		</div>
 	);
