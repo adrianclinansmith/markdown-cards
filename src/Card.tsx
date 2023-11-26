@@ -45,8 +45,7 @@ function cardClick(e: React.MouseEvent<HTMLElement, MouseEvent>, frontContent: s
 	let utterance = new SpeechSynthesisUtterance();
 	if (card.classList.contains("flipped")) {
 		utterance.text = backContent;
-		utterance.lang = "zh-Hans"; // "zh-Hans" is simplified Chinese 
-		// "zh-Hans-Latn" should be for Hanyu Pinyin, but it doesn't work
+		utterance.lang = "zh-Hans"; // zh-Hans: simplified Chinese 
 	}
 	else {
 		utterance.text = frontContent;
