@@ -2,7 +2,7 @@ import { ChangeEvent, Dispatch, SetStateAction } from "react";
 import { displayObserver, resetDeck, toggleToolbar, useEffect_FirstRenderOnly, FontSizeAcronym } from "./utils.ts";
 
 type ToolbarItemId = 
-"uploader" | "resetter" | "toolbar-toggler" | "font-size-picker" | "speaker";
+"file-picker" | "resetter" | "toolbar-toggler" | "font-size-picker" | "speaker";
 
 interface Props {
 	id: ToolbarItemId;
@@ -35,7 +35,7 @@ export default function ToolbarItem({ id, setMd, fontSize, setFontSize, speak, s
 	});
 	// JSX
 	const className = "toolbar-item"
-	if (id === "uploader") {
+	if (id === "file-picker") {
 		return (
 			<label className={className} id={id} htmlFor="file-input">
 				<SvgIcon item={id}/>
@@ -43,7 +43,8 @@ export default function ToolbarItem({ id, setMd, fontSize, setFontSize, speak, s
 					accept=".md,.txt"
 					hidden
 					id="file-input"
-					onChange={(e) => uploaderOnChange(e, setMd!)}
+					multiple
+					onChange={(e) => filePickerOnChange(e, setMd!)}
 					type="file"
 				/>
 			</label>
@@ -109,7 +110,7 @@ interface SvgIconProps {
  */
 function SvgIcon({ item, strikethrough }: SvgIconProps) {
 	let SvgPath = <path d=""/>;
-	if (item === "uploader") {
+	if (item === "file-picker") {
 		SvgPath = <path d="M9 16h6v-6h4l-7-7-7 7h4zm-4 2h14v2H5z"/>;
 	}
 	else if (item === "resetter") {
@@ -135,19 +136,19 @@ function SvgIcon({ item, strikethrough }: SvgIconProps) {
 // *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*
 
 /**
- * Read the selected markdown file
+ * Read the selected markdown files
  */
-function uploaderOnChange(e: ChangeEvent<HTMLInputElement>, 
+async function filePickerOnChange(e: ChangeEvent<HTMLInputElement>, 
 setMd: Dispatch<SetStateAction<string>>) {
-	const uploaderInput = e.currentTarget;
-	const reader = new FileReader();
-	reader.onload = () => {
-		const md = reader.result as string;
-		setMd(md);
-	};
-	if (uploaderInput.files?.length) {
-		reader.readAsText(uploaderInput.files[0]);
+	const fileInput = e.currentTarget;
+	if (!fileInput.files) {
+		return;
 	}
+	let content = "";
+	for (const file of fileInput.files) {
+		content += await file.text() + "\n";
+	}
+	setMd(content);
 }
 
 /**

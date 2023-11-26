@@ -52,7 +52,7 @@ export default function App() {
 	return (
 		<div className="App">
 			<header id="toolbar">
-				<ToolbarItem id="uploader" setMd={setMd} />
+				<ToolbarItem id="file-picker" setMd={setMd} />
 				<ToolbarItem id="resetter" />
 				<ToolbarItem 
 					id="font-size-picker" 
