@@ -136,16 +136,20 @@ function SvgIcon({ item, strikethrough }: SvgIconProps) {
 // *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*
 
 /**
- * Read the selected markdown files
+ * Sort the selected files alphanumerically by filename, then load their
+ * contents 
  */
 async function filePickerOnChange(e: ChangeEvent<HTMLInputElement>, 
 setMd: Dispatch<SetStateAction<string>>) {
-	const fileInput = e.currentTarget;
-	if (!fileInput.files) {
+	const input = e.currentTarget;
+	if (!input.files) {
 		return;
 	}
+	const selectedFiles = Array.from(input.files).sort((f1, f2) => {
+		return f1.name.localeCompare(f2.name, "en", {numeric: true});
+	});
 	let content = "";
-	for (const file of fileInput.files) {
+	for (const file of selectedFiles) {
 		content += await file.text() + "\n";
 	}
 	setMd(content);
@@ -162,7 +166,7 @@ function speakerOnClick(speak: boolean, setSpeak: Dispatch<SetStateAction<boolea
 		const utterance = new SpeechSynthesisUtterance("speaker on");
 		window.speechSynthesis.speak(utterance);
 	}
-	setSpeak!(!speak);
+	setSpeak(!speak);
 }
 
 // *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*
@@ -171,7 +175,7 @@ function speakerOnClick(speak: boolean, setSpeak: Dispatch<SetStateAction<boolea
 
 /** 
  * Store fontSizeAcronym in localStorage or log a message if it's unsuccessful 
-*/
+ */
 function storeFontSizeAcronym(acronym: string) {
 	try {
 		window.localStorage.setItem("fontSizeAcronym", acronym);
