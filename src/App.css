@@ -77,40 +77,33 @@ button {
 
 #deck {
 	height: 100%;
-	white-space: nowrap; /* all cards go on one line */
 	overflow: scroll hidden; /* x | y */
+	perspective: 1000px; /* 3d card flip */
 	scroll-snap-type: x mandatory;
 	scrollbar-width: none; /* firefox only */
-	perspective: 1000px;
-	/* padding-top: 10px;
-	padding-bottom: 10px; */
+	white-space: nowrap; /* prevent cards from wrapping */
 }
 #deck::-webkit-scrollbar { /* chrome & safari only */
 	display: none; 
 }
 
 .card {
-	display: inline-block;
-	position: relative;
+	--card-margin: 10px;
 	background-color: white;
-	box-sizing: border-box; /* width & height include padding & border */
-	width: calc(100% - 20px);
-	height: calc(100% - 20px);
-	/* top | left & right | bottom */
-	/* margin: 1%;  */
-	margin-left: 10px;
-	margin-right: 10px;
-	margin-top: 10px;
-	margin-bottom: 10px;
-	/* top: 1%; */
-	scroll-margin: 10px; /* percent not allowed */
-	border: 1px solid black;
-	scroll-snap-align: start; /* scroll snaps to start of this element */
+	border: 1px solid black;	
 	box-shadow: 2px 2px 5px black;
-	overflow-wrap: break-word; /* break overflow words if needed */
-	transition: transform 0.6s;
+	box-sizing: border-box; /* width & height include padding & border */
+	display: inline-block; /* no newline after card */
+	height: calc(100% - 2 * var(--card-margin));
+	margin: var(--card-margin);
+	overflow-wrap: break-word; /* break long words if needed */
+	position: relative; /* to position absolute card-front & card-back */
+	scroll-margin: var(--card-margin);
+	scroll-snap-align: start; /* scroll snaps to start of this element */
 	transform-style: preserve-3d;
+	transition: transform 0.6s;
 	white-space: normal; /* don't inherit "nowrap" from deck */
+	width: calc(100% - 2 * var(--card-margin));
 	z-index: 2;
 }
 .card.flipped {
@@ -119,26 +112,24 @@ button {
 
 .card-front, .card-back {
 	backface-visibility: hidden;
-	transform: rotateX(0deg); /* Needed to hide backface in Firefox */
-	position: absolute;
-	inset: 0;     /* Center vertically & horizontally */
-  	margin: auto; /* Center vertically & horizontally */
-	width: fit-content;
-	max-width: 80%;
 	height: fit-content;
+	inset: 0;     /* Center vertically & horizontally */
+	margin: auto; /* Center vertically & horizontally */
+	mask-image: linear-gradient(transparent 0%, black 5%, black 95%, transparent 100%); /* fade effect for top and bottom */
 	max-height: 100%;
+	max-width: 80%;
 	overflow-y: scroll; /* Breaks backface-visibility if defined on parent */ 
-	mask-image: linear-gradient(transparent 0%, black 5%, black 95%, transparent 100%);
+	position: absolute;
+	transform: rotateX(0deg); /* Needed to hide backface in Firefox */
+	width: fit-content;
 }
 
 .card-front {
-	/* background-color: red; */
 	text-align: center;
 	z-index: 3;
 }
 
 .card-back {
-	/* background-color: blue; */
 	transform: rotateY(-180deg);
 	z-index: 1;
 }
