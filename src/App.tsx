@@ -12,10 +12,15 @@ import {
 //#region On Script Load (/static/js/bundle.js)
 // *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*
 
-window.onresize = () => {
-	console.log("window resize"); // http://192.168.0.244:3000
-}
-// Get fontSizeAcronym from localStorage or default to "M"
+/** Prevent the deck from scrolling to another card when orientation changes */
+window.screen.orientation.onchange = () => {
+	const cardIndexDisplay = document.getElementById("card-index-display")!;
+	const index = parseInt(/\d+/.exec(cardIndexDisplay.textContent!)![0]);
+	const currentCard = document.getElementById(`card-${index}`)!;
+	setTimeout(() => currentCard.scrollIntoView(), 50);
+};
+
+/** Get fontSizeAcronym from localStorage */ 
 const initialFontSize = getStoredFontSizeAcronym() as FontSizeAcronym;
 
 //#endregion
@@ -136,13 +141,14 @@ function splitMarkdown(md: string) {
  * there or an error ocurred 
 */
 function getStoredFontSizeAcronym() {
-	let result: string | null;
+	let result: string;
+	const M = "M";
 	try {
-		result = window.localStorage.getItem("fontSizeAcronym");
+		result = window.localStorage.getItem("fontSizeAcronym") ?? M;
 	} catch /* SecurityError: localStorage is probably disabled */ {
-		return "M";	
+		return M;	
 	}
-	return ["XS","S","M","L","XL"].some(el => el === result) ? result : "M";
+	return ["XS","S","M","L","XL"].some(el => el === result) ? result : M;
 }
 
 /** 
