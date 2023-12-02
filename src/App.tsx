@@ -21,7 +21,7 @@ window.screen.orientation.onchange = () => {
 };
 
 /** Get fontSizeAcronym from localStorage */ 
-const initialFontSize = getStoredFontSizeAcronym() as FontSizeAcronym;
+const initialFontSize = getStoredFontSizeAcronym();
 
 //#endregion
 //#region Component
@@ -141,14 +141,17 @@ function splitMarkdown(md: string) {
  * there or an error ocurred 
 */
 function getStoredFontSizeAcronym() {
-	let result: string;
-	const M = "M";
+	let storedValue: string | null;
+	const M: FontSizeAcronym = "M";
 	try {
-		result = window.localStorage.getItem("fontSizeAcronym") ?? M;
+		storedValue = window.localStorage.getItem("fontSizeAcronym");
 	} catch /* SecurityError: localStorage is probably disabled */ {
 		return M;	
 	}
-	return ["XS","S","M","L","XL"].some(el => el === result) ? result : M;
+	if (["XS","S","M","L","XL"].some(acr => acr === storedValue)) {
+		return storedValue as FontSizeAcronym
+	}
+	return M;
 }
 
 /** 
