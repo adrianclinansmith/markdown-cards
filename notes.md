@@ -34,7 +34,8 @@ https://katex.org/docs/issues.html
 # Bugs
 
 - smooth-scroll for deck doesn't always work on Safari desktop
-- when changing from multiple card file to single card file, the index label isn't updated.
+- when changing from multiple card file to single card file, the index label isn't updated
+- when phone orientation changes and the user attempts to scroll immediately, sometimes the card disappears
 
 # Features
 
