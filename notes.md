@@ -27,25 +27,21 @@ https://katex.org/docs/issues.html
 
 - Keep default markdown up to date
 - make toolbar and toolbar-items' sizes more dynamic
-- make tool-bar-item colors consistent 
-- logo doesn't appear on iOS, it's probably too big
-- for overflow cards, allow text to scroll to the top or bottom of card, but keep margins when it isn't scrolled
-- on firefox, make scrollbar invisible when not in use
-- maybe change refresh button to reset button
 - add descriptions to the functions
 - add more font sizes
+- change font for font-size-picker and card-index-display
 
 # Bugs
 
 - smooth-scroll for deck doesn't always work on Safari desktop
 - when changing from multiple card file to single card file, the index label isn't updated.
-- On Safari desktop, localStorage doesn't seem to work
 
 # Features
 
+- turn into Progressive Web App (PWA)
 - allow markdown images
-- create markdown audio 
 - enhance katex line-breaks
+- allow user to create markdown files
 
 # Links
 
