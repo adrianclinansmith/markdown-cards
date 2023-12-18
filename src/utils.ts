@@ -40,9 +40,9 @@ export function useEffect_UpdateOnly(callback: (v:any)=>void, v: any) {
 
 /** 
  * A specialized IntersectionObserver: the callback fires with a single entry
- * when the target is almost entirely intersecting the root. The callback
- * doesn't fire when isIntersecting is false, and any subsequent entries get 
- * ignored. 
+ * when the target almost entirely intersects the root. This means the 
+ * callback only fires when isIntersecting is true, and any subsequent entries 
+ * get ignored. 
  */
 export function displayObserver(
 rootId: string, 
@@ -51,10 +51,33 @@ callback: (target: Element) => void
 	const options = {
 		root: document.getElementById(rootId),
 		rootMargin: "0px",
-		threshold: 0.9,
+		threshold: 0.95,
 	};
 	const observerCallback: IntersectionObserverCallback = (entries) => {
 		if (entries[0].isIntersecting) {
+			callback(entries[0].target);
+		}	
+	};
+	return new IntersectionObserver(observerCallback, options);
+}
+
+/** 
+ * A specialized IntersectionObserver: the callback fires with a single entry
+ * when the target almost entirely un-intersects the root. This means the 
+ * callback only fires when isIntersecting is false, and any subsequent entries 
+ * get ignored. 
+ */
+export function unIntersectionObserver(
+rootId: string, 
+callback: (target: Element) => void
+) {
+	const options = {
+		root: document.getElementById(rootId),
+		rootMargin: "0px",
+		threshold: 0,
+	};
+	const observerCallback: IntersectionObserverCallback = (entries) => {
+		if (!entries[0].isIntersecting) {
 			callback(entries[0].target);
 		}	
 	};
