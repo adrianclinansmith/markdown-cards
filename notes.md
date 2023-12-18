@@ -36,6 +36,7 @@ https://katex.org/docs/issues.html
 - smooth-scroll for deck doesn't always work on Safari desktop
 - when changing from multiple card file to single card file, the index label isn't updated
 - when phone orientation changes and the user attempts to scroll immediately, sometimes the card disappears
+- I think making deck's scroll-snap-type = "none" doesn't always reset when it should, causing the cards to slide around
 
 # Features
 
