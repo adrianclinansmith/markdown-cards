@@ -3,24 +3,23 @@ import Md from "./Md";
 
 interface Props {
 	position: number;
-	entirelyVisibleObserver: IntersectionObserver;
+	intersectionObserver: IntersectionObserver;
 	// entirelyNotVisibleObserver: IntersectionObserver;
 	frontContent: string;
 	backContent:string;
 	speak: boolean;
 }
 
-export default function Card({ position, entirelyVisibleObserver, frontContent, backContent, speak }: Props) {
+export default function Card({ position, intersectionObserver, frontContent, backContent, speak }: Props) {
 	console.log("card render")
 	return (
 		<article 
 			className="card" 
 			id={`card-${position}`} 
 			onClick={ (e) => cardClick(e, frontContent, backContent, speak) }
-			onTransitionEnd={cardTransitionEnd} 
-			ref={ (el) => { 
-				refCallback(el, entirelyVisibleObserver);
-			}}
+			onTransitionCancel={cardTransitionEndOrCancel} 
+			onTransitionEnd={cardTransitionEndOrCancel} 
+			ref={ (el) => refCallback(el, intersectionObserver) }
 		>
 			<section className="card-front"><Md>{frontContent}</Md></section>
 			<section className="card-back"><Md>{backContent}</Md></section>
@@ -33,12 +32,11 @@ export default function Card({ position, entirelyVisibleObserver, frontContent, 
 // *~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*~*
 
 /**
- * Flip the card (and speak if it's on)
+ * Flip the card and speak if the speaker is on
  */
-function cardClick(e: React.MouseEvent<HTMLElement, MouseEvent>, frontContent: string, backContent: string, speak: boolean) {
+function cardClick(e: React.MouseEvent<HTMLElement, MouseEvent>, frontContent: string, backContent: string, speak: boolean) { 
 	const deck = e.currentTarget.parentElement!;
-	/* For Chrome: scroll-snap-type must be disabled when card flips */
-	deck.style.scrollSnapType = "none"; 
+	deck.style.scrollSnapType = "none";
 	const card = e.currentTarget;
 	card.classList.toggle("flipped");
 	if (!speak) {
@@ -60,7 +58,7 @@ function cardClick(e: React.MouseEvent<HTMLElement, MouseEvent>, frontContent: s
 /**
  * Turn scroll-snap-type back on after the card has flipped
  */
-function cardTransitionEnd(e: TransitionEvent<HTMLDivElement>) {
+function cardTransitionEndOrCancel(e: TransitionEvent<HTMLDivElement>) {
 	const deck = e.currentTarget.parentElement!;
 	deck.style.scrollSnapType = ""; // enable App.css scroll-snap-type
 }
@@ -68,9 +66,9 @@ function cardTransitionEnd(e: TransitionEvent<HTMLDivElement>) {
 /**
  * Watch the card with an observer to know when it's on screen
  */
-function refCallback(el: HTMLElement | null, entirelyVisibleObserver: IntersectionObserver) {
+function refCallback(el: HTMLElement | null, intersectionObserver: IntersectionObserver) {
 	if (el) {
-		entirelyVisibleObserver.unobserve(el);
-		entirelyVisibleObserver.observe(el);
+		intersectionObserver.unobserve(el);
+		intersectionObserver.observe(el);
 	}
 }

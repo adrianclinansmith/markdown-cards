@@ -101,7 +101,7 @@ button {
 	scroll-margin: var(--card-margin);
 	scroll-snap-align: start; /* scroll snaps to start of this element */
 	transform-style: preserve-3d;
-	transition: transform 0.6s;
+	transition: none; /* set in JavaScript */
 	white-space: normal; /* don't inherit "nowrap" from deck */
 	width: calc(100% - 2 * var(--card-margin));
 	z-index: 2;

@@ -36,12 +36,24 @@ export default function App() {
 	// Variables
 	const [cardFronts, cardBacks] = splitMarkdown(md);
 	const observerCallback = (target: Element) => {
+		// update card-index-display
 		const index = parseInt(/\d+/.exec(target.id)![0]);
 		const indexDisplay = document.getElementById("card-index-display")!;
 		const newText = indexDisplay.textContent!.replace(/\d+/, `${index}`);
 		indexDisplay.textContent = newText;
-		target.previousElementSibling?.classList.remove("flipped");
-		target.nextElementSibling?.classList.remove("flipped");
+		// add transition to current card
+		(target as HTMLElement).style.transition = "transform 0.6s";
+		const previous = target.previousElementSibling as HTMLElement | null;
+		const next = target.nextElementSibling as HTMLElement | null;
+		// remove transition from last card and put it face-up 
+		if (previous) {
+			previous.style.transition = "none";
+			previous.classList.remove("flipped");
+		}
+		if (next) {
+			next.style.transition = "none";
+			next.classList.remove("flipped");
+		}
 	};
 	// Refs
 	const cardObserverRef = useRef(displayObserver("deck", observerCallback));
@@ -74,8 +86,7 @@ export default function App() {
 					cardFronts.map((front, i) => 
 						<Card 
 							key={i} 
-							entirelyVisibleObserver={cardObserverRef.current}
-							// entirelyNotVisibleObserver={cardUnIntersectionRef.current}
+							intersectionObserver={cardObserverRef.current}
 							position={i+1} 
 							frontContent={front}
 							backContent={cardBacks[i]}

@@ -51,7 +51,7 @@ callback: (target: Element) => void
 	const options = {
 		root: document.getElementById(rootId),
 		rootMargin: "0px",
-		threshold: 1,
+		threshold: 0.98,
 	};
 	const observerCallback: IntersectionObserverCallback = (entries) => {
 		if (entries[0].isIntersecting) {
