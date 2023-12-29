@@ -5,7 +5,7 @@ import ToolbarItem from "./ToolbarItem";
 import Card from "./Card";
 import { defaultMarkdown } from "./DefaultMarkdown";
 import {
-	displayObserver, unIntersectionObserver, resetDeck, toggleToolbar, useEffect_UpdateOnly,
+	displayObserver, resetDeck, toggleToolbar, useEffect_UpdateOnly,
 	FontSizeAcronym 
 } from "./utils.ts"
 
@@ -40,19 +40,11 @@ export default function App() {
 		const indexDisplay = document.getElementById("card-index-display")!;
 		const newText = indexDisplay.textContent!.replace(/\d+/, `${index}`);
 		indexDisplay.textContent = newText;
-	};
-	const unIntersectionCallback = (target: Element) => {
-		console.log("un-intersecting");
-		(target as HTMLElement).style.transition = "none";
-		// const deck = target.parentElement as HTMLElement;
-		// deck.style.scrollSnapType = "none"; 
-		target.classList.remove("flipped");
-		setTimeout(() => (target as HTMLElement).style.transition = "", 50);
-		
+		target.previousElementSibling?.classList.remove("flipped");
+		target.nextElementSibling?.classList.remove("flipped");
 	};
 	// Refs
 	const cardObserverRef = useRef(displayObserver("deck", observerCallback));
-	const cardUnIntersectionRef = useRef(unIntersectionObserver("deck", unIntersectionCallback));
 	// Effects
 	useEffect_UpdateOnly(() => {
 		console.log("useEffectUpdateOnly");
@@ -83,7 +75,7 @@ export default function App() {
 						<Card 
 							key={i} 
 							entirelyVisibleObserver={cardObserverRef.current}
-							entirelyNotVisibleObserver={cardUnIntersectionRef.current}
+							// entirelyNotVisibleObserver={cardUnIntersectionRef.current}
 							position={i+1} 
 							frontContent={front}
 							backContent={cardBacks[i]}

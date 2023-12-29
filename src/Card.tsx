@@ -4,13 +4,13 @@ import Md from "./Md";
 interface Props {
 	position: number;
 	entirelyVisibleObserver: IntersectionObserver;
-	entirelyNotVisibleObserver: IntersectionObserver;
+	// entirelyNotVisibleObserver: IntersectionObserver;
 	frontContent: string;
 	backContent:string;
 	speak: boolean;
 }
 
-export default function Card({ position, entirelyVisibleObserver, entirelyNotVisibleObserver, frontContent, backContent, speak }: Props) {
+export default function Card({ position, entirelyVisibleObserver, frontContent, backContent, speak }: Props) {
 	console.log("card render")
 	return (
 		<article 
@@ -19,7 +19,7 @@ export default function Card({ position, entirelyVisibleObserver, entirelyNotVis
 			onClick={ (e) => cardClick(e, frontContent, backContent, speak) }
 			onTransitionEnd={cardTransitionEnd} 
 			ref={ (el) => { 
-				refCallback(el, entirelyVisibleObserver, entirelyNotVisibleObserver);
+				refCallback(el, entirelyVisibleObserver);
 			}}
 		>
 			<section className="card-front"><Md>{frontContent}</Md></section>
@@ -68,11 +68,9 @@ function cardTransitionEnd(e: TransitionEvent<HTMLDivElement>) {
 /**
  * Watch the card with an observer to know when it's on screen
  */
-function refCallback(el: HTMLElement | null, entirelyVisibleObserver: IntersectionObserver, entirelyNotVisibleObserver: IntersectionObserver) {
+function refCallback(el: HTMLElement | null, entirelyVisibleObserver: IntersectionObserver) {
 	if (el) {
 		entirelyVisibleObserver.unobserve(el);
-		entirelyNotVisibleObserver.unobserve(el);
 		entirelyVisibleObserver.observe(el);
-		entirelyNotVisibleObserver.observe(el);
 	}
 }
