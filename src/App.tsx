@@ -31,21 +31,19 @@ export default function App() {
 	console.log("\n\nrender app")
 	// States
 	const [md, setMd] = useState(defaultMarkdown);
+	const [currentIndex, setCurrentIndex] = useState(1);
 	const [fontSize, setFontSize] = useState(initialFontSize);
 	const [speak, setSpeak] = useState(false);
 	// Variables
 	const [cardFronts, cardBacks] = splitMarkdown(md);
 	const observerCallback = (target: Element) => {
 		// update card-index-display
-		const index = parseInt(/\d+/.exec(target.id)![0]);
-		const indexDisplay = document.getElementById("card-index-display")!;
-		const newText = indexDisplay.textContent!.replace(/\d+/, `${index}`);
-		indexDisplay.textContent = newText;
-		// add transition to current card
+		setCurrentIndex(parseInt(/\d+/.exec(target.id)![0]));
+		// add flip transition to current card
 		(target as HTMLElement).style.transition = "transform 0.6s";
 		const previous = target.previousElementSibling as HTMLElement | null;
 		const next = target.nextElementSibling as HTMLElement | null;
-		// remove transition from last card and put it face-up 
+		// remove flip transition from surrounding cards and make them face-up 
 		if (previous) {
 			previous.style.transition = "none";
 			previous.classList.remove("flipped");
@@ -60,10 +58,6 @@ export default function App() {
 	// Effects
 	useEffect_UpdateOnly(() => {
 		console.log("useEffectUpdateOnly");
-		const indexDisplay = document.getElementById("card-index-display")!;
-		const numberOfCards = `${cardFronts.length}`;
-		const text = indexDisplay.textContent!.replace(/\d+$/, numberOfCards);
-		indexDisplay.textContent = text;
 		toggleToolbar();
 		resetDeck();
 	}, md);
@@ -99,7 +93,7 @@ export default function App() {
 				id="card-index-display" 
 				onClick={ e => e.currentTarget.classList.toggle("hide") }
 			>
-				1 of {cardFronts.length}
+				{currentIndex} of {cardFronts.length}
 			</button>
 		</div>
 	);
